@@ -1,5 +1,4 @@
 # GigX: A Freelancer Marketplace
-**March 20, 2024**
 
 ## Overview
 This document outlines the concept and functionalities for GigX, a web application built using the MERN stack (MongoDB, Express.js, React.js, and Node.js). GigX is a freelancer marketplace that utilizes its amazing features to connect freelancers with project opportunities based on skills, budget, and location. My goal is to streamline the freelance hiring process and create a more efficient ecosystem for both clients and freelancers. 🚀
