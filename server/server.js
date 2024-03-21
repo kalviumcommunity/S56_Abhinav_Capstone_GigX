@@ -14,6 +14,10 @@ app.get('/', (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
-  });
+app.listen(port, (err) => {
+    if (err) {
+        console.error('Error in starting the server!!!', err);
+    } else {
+        console.log(`Server listening at http://localhost:${port}`);
+    }
+});
