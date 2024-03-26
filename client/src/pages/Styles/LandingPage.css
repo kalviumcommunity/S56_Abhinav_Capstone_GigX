@@ -1,0 +1,71 @@
+.hero {
+    padding: 5px 20px;
+    margin-top: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero-left {
+    width: 50%;
+}
+
+.hero-right img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    border-radius: 10px;
+    margin-top: 10vh; 
+}
+
+.search-bar input {
+    flex: 1; 
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.keyword input {
+    margin-right: 10vh; 
+}
+.msg{
+    font-size: small;
+}
+.msg span{
+    font-weight: 600;
+}
+.topFreelancers{
+    justify-content: center;
+    gap: 100px;
+    
+
+}
+.company{
+    margin: 5px 20px;
+}
+.companies{
+    justify-content: center;
+    gap: 20px;
+}
+.companies img{
+    width: 300px;
+    height: 200px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    
+}
+.working{
+    margin: 5px 20px;
+
+}
+.workingimg{
+    align-items: center;
+    justify-content: center;
+}

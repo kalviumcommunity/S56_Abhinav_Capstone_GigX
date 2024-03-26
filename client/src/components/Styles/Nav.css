@@ -1,0 +1,72 @@
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .topnav {
+    background-color: #dff5ff;
+    padding: 5px 20px;
+  }
+  
+  .routes p {
+    margin-right: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .routes p:hover {
+    color: #007bff; 
+  }
+  
+  .rightnav .call span {
+    margin-left: 5px;
+    font-weight: 600;
+  }
+  
+  .rightnav {
+    gap: 1vw;
+  }
+  
+  .lang p {
+    margin: 0;
+  }
+  
+
+  
+  .rightnav .call:hover {
+    transform: scale(1.1); 
+    transition: transform 0.3s ease;
+  }
+
+
+  .bottomnav {
+    padding: 5px 20px;
+  }
+  .left, .right {
+    margin-top: 1vh;
+  }
+  .left img{
+    width: 100px;
+  }
+  .bottomnav select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+  }
+  
+  .bottomnav .center {
+    width: 60vw;
+  }
+  .search{
+    width: 100%;
+  }
+  
+  .bottomnav .right {
+    gap: 10px;
+  }
+  .searchicon:hover{
+    cursor: pointer;
+  }
