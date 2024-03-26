@@ -9,7 +9,7 @@ import { FaSearch  } from "react-icons/fa";
 const Nav = () => {
   return (
     <div>
-      <div className="topnav flex">
+      <nav className="topnav flex">
         <div className="routes flex">
           <p>Home</p>
           <p>Companies</p>
@@ -25,7 +25,7 @@ const Nav = () => {
             <p>English</p>
           </div>
         </div>
-      </div>
+      </nav>
       <div className="bottomnav flex">
         <div className="left flex">
           <img src={logo} alt="logo" />

@@ -3,6 +3,7 @@ import "./Styles/Footer.css";
 import logo from "../assets/logo.png";
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
 return (
     <div className="footer-container">
         <div className="footer">
@@ -30,7 +31,7 @@ return (
             </div>
         </div>
             <p className='copyright'> <strong> contactgigx@gmail.com</strong> </p>
-        <p className='copyright'>&copy; 2024 GigX. All rights reserved.</p>
+        <p className='copyright'>&copy; {currentYear} GigX. All rights reserved.</p>
     </div>
 );
 };
