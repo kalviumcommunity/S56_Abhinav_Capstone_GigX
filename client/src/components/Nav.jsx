@@ -5,6 +5,7 @@ import { IoIosCall } from "react-icons/io";
 import { TextField } from "@mui/material";
 import {Button} from "@mui/material";
 import { FaSearch  } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   return (
@@ -48,7 +49,8 @@ const Nav = () => {
         <FaSearch className="searchicon" />
         </div>
         <div className="right flex">
-        <Button variant="outlined">Sign In</Button>
+          <Link to={"/login"}>
+        <Button variant="outlined">Sign In</Button></Link>
         <Button variant="contained">Post Project</Button>
         </div>
       </div>

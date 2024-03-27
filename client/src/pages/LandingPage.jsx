@@ -11,12 +11,14 @@ import pf3 from "../assets/Profiles/pf3.png"
 import pf4 from "../assets/Profiles/pf4.png"
 import working from "../assets/working.png"
 import Footer from '../components/Footer';
+import Nav from '../components/Nav';
 
 
 
 const LandingPage = () => {
   return (
     <div>
+<Nav />
         <div className="hero flex">
             <div className="hero-left">
                 <h1>The Future of Freelance Work is Here.</h1>
