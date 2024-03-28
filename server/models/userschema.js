@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-
-
 const userSchema = mongoose.Schema({
     name: String,
     email: String,
@@ -8,6 +6,7 @@ const userSchema = mongoose.Schema({
     role:String,
     company:String,
     password:String,
+    freelancer:Boolean,
 
 },versionKey=false);
 
