@@ -1,18 +1,29 @@
 const express = require('express'); 
 const app = express();  
 const dotenv = require('dotenv');
+const cors = require('cors');  
 const port = process.env.PORT || 3000;  
+const { connectDB, mongooseConnect } = require('./db')
 
+const router = require('./routes');
+app.use(express.json());
+app.use(cors());
+connectDB();
 dotenv.config();
 
 app.get('/', (req, res) => {
     try {
-        res.send('Server Started');
+        const connectionStatus = mongooseConnect();
+        if (connectionStatus ) {
+            res.send('MongoDB Connected Successfully');
+        }
+        
     }
     catch (err) {
-        console.error(err);
+        res.send("MongoDB Connection Failed");
     }
 });
+app.use(router);
 
 app.listen(port, (err) => {
     if (err) {

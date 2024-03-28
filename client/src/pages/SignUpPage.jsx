@@ -42,6 +42,7 @@ const SignUpPage = () => {
                 <img src={google} alt="" />
                 <p>Continue With Google</p>
               </div>
+              
             </div>
             <div className="right-section">
               <img src={loginimg} alt="sign up image" />
