@@ -21,5 +21,21 @@ router.get("/users",async(req,res)=>{
     }
 })
 
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await userModel.findOne({ email });
+
+        if (!user || user.password !== password) {
+            return res.status(401).send('Invalid email or password');
+        }
+
+        res.send('Login successful');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 // export
 module.exports=router
