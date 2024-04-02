@@ -30,6 +30,7 @@ const SignUpPage = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
     try {
+      console.log(formData,"formdata")
       await axios.post('https://gigx.onrender.com/signup', formData);
       navigate('/');
     } catch (error) {
