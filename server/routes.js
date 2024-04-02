@@ -7,11 +7,10 @@ const jwt = require("jsonwebtoken");
 
 router.post("/signup", async (req, res) => {
   try {
-    const { email, password } = req.body;
-
+ const { name, email, phone, role, company, password, freelancer } = req.body;
     const hash = await bcrypt.hash(password, 5);
 
-    const newUser = new userModel({ email, password: hash });
+    const newUser = new userModel({ name, email, phone, role, company, password: hash, freelancer });
 
     await newUser.save();
 
