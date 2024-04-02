@@ -34,8 +34,8 @@ router.post("/login", async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid) {
-      const token = jwt.sign({ email: user.email }, "your_secret_key", {
-        expiresIn: "1h" 
+      const token = jwt.sign({ email: user.email }, "key", {
+        expiresIn: "100d" 
       });
       console.log("Login successful");
       res.send({ token }); 
