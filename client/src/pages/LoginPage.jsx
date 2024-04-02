@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
@@ -26,9 +26,10 @@ const LoginPage = () => {
         event.preventDefault();
         try {
             const response = await axios.post('https://gigx.onrender.com/login', formData);
-            // console.log(response);
-            Cookies.set('user', response.data);
+            const { token } = response.data;
+            Cookies.set('token', token); 
             navigate('/');
+
         } catch (error) {
             console.error('Error signing in:', error);
         }
@@ -66,7 +67,7 @@ const LoginPage = () => {
                 </form>
 
                 <p className='center'>
-                    Don't have an account? <Link to={"/signup"}> <span className='pointer signup'>Sign Up</span></Link>
+                    Don&apos;t have an account? <Link to={"/signup"}> <span className='pointer signup'>Sign Up</span></Link>
                 </p>
             </div>
         </div>
