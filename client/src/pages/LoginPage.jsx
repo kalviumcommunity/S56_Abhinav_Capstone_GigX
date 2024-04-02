@@ -25,10 +25,9 @@ const LoginPage = () => {
     const handleSignInSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log(formData, "formdata")
-            const response = await axios.post('https://gigx.onrender.com/login', formData);
-            // console.log(response);
-            Cookies.set('user', response.data);
+            const response = await axios.post('http://localhost:3000/login', formData);
+            const { token } = response.data;
+            Cookies.set('token', token); 
             navigate('/');
 
         } catch (error) {

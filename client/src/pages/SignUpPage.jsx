@@ -31,7 +31,7 @@ const SignUpPage = () => {
     event.preventDefault();
     try {
       console.log(formData,"formdata")
-      await axios.post('https://gigx.onrender.com/signup', formData);
+      await axios.post('http://localhost:3000/signup', formData);
       navigate('/');
     } catch (error) {
       console.error('Error signing up:', error);

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { userModel } = require("./models/userschema");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 
 router.post("/signup", async (req, res) => {
   try {
@@ -32,6 +34,11 @@ router.post("/login", async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid) {
+      const token = jwt.sign({ email: user.email }, "your_secret_key", {
+        expiresIn: "1h" 
+      });
+      console.log("Login successful");
+      res.send({ token }); 
       console.log("Login successful");
       res.send("Login successful");
     } else {

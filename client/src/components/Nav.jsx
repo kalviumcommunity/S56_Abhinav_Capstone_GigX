@@ -12,7 +12,7 @@ const Nav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const userCookie = Cookies.get("user");
+    const userCookie = Cookies.get("token");
     setIsLoggedIn(!!userCookie); 
   }, []);
 
