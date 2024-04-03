@@ -5,11 +5,12 @@ import { IoIosCall } from "react-icons/io";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Nav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userCookie = Cookies.get("token");
@@ -17,8 +18,10 @@ const Nav = () => {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("user"); 
+    Cookies.remove("token"); 
+    Cookies.remove("email");
     setIsLoggedIn(false); 
+    navigate("/");
   };
 
   return (
@@ -77,7 +80,9 @@ const Nav = () => {
               <Button variant="outlined">Sign In</Button>
             </Link>
           )}
-          <Button variant="contained">Post Project</Button>
+          <Link to={isLoggedIn ? "/account" : "/login"}>
+            <Button variant="contained">My Account</Button>
+          </Link>
         </div>
       </div>
     </div>

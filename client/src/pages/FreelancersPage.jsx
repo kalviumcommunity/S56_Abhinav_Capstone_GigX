@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Nav from '../components/Nav';
+import Footer from '../components/Footer';
 
 const FreelancersPage = () => {
   const [users, setUsers] = useState([]);
@@ -40,6 +41,7 @@ const FreelancersPage = () => {
         )
       ))}
     </div>
+    <Footer/>
     </>
   );
 };
