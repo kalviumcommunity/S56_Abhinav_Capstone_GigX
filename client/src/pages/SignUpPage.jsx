@@ -5,7 +5,7 @@ import { FaTimes } from 'react-icons/fa';
 import loginimg from "../assets/loginimg.png";
 import google from "../assets/google.png";
 import './Styles/SignUp.css';
-
+import Cookies from 'js-cookie';
 const SignUpPage = () => {
   const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ const SignUpPage = () => {
     password: '',
     freelancer: false 
   });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -30,11 +31,19 @@ const SignUpPage = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
     try {
-      console.log(formData,"formdata")
-      await axios.post('https://gigx.onrender.com/signup', formData);
+      const  response= await axios.post('https://gigx.onrender.com/signup', formData);
+      const { token,email } = response.data;
+
+      Cookies.set('token', token); 
+            Cookies.set('email', email);
       navigate('/');
     } catch (error) {
       console.error('Error signing up:', error);
+      if (error.response && error.response.status === 400) {
+        setErrorMessage('Email already exists');
+      } else {
+        console.error('Unexpected error:', error);
+      }
     }
   };
 
@@ -45,6 +54,7 @@ const SignUpPage = () => {
           <FaTimes />
         </Link>
         
+
         <form onSubmit={handleSignUp}>
           <div className="container-main flex">
             <div className="left-section">
@@ -62,6 +72,8 @@ const SignUpPage = () => {
                 </div>
               </div>
               <button type="submit" className='signupbtn'>Sign Up</button>
+              {errorMessage && <p style={{ color: 'red', textAlign:"center" }}>{errorMessage}</p>}
+
               <p className='center'>Or</p>
               <div className="google pointer">
                 <img src={google} alt="" />

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./Styles/CompanyPage.css";
 import Nav from '../components/Nav';
+import Footer from '../components/Footer';
 
 const CompanyPage = () => {
   const [users, setUsers] = useState([]);
@@ -40,6 +41,7 @@ const CompanyPage = () => {
         )
       ))}
     </div>
+    <Footer/>
     </>
   );
 };

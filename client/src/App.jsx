@@ -6,6 +6,7 @@ import SignUpPage from "./pages/SignUpPage"
 import { Routes, Route } from "react-router-dom"
 import CompanyPage from "./pages/CompanyPage"
 import FreelancersPage from "./pages/FreelancersPage"
+import AccountPage from "./pages/AccountPage"
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/companies" element={<CompanyPage />} />
         <Route path="/freelancers" element={<FreelancersPage/>} />
+        <Route path="/account" element={<AccountPage />} />
 
 
       </Routes>

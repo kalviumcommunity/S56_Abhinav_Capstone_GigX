@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
@@ -13,6 +13,7 @@ const LoginPage = () => {
         email: '',
         password: ''
     });
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -26,12 +27,18 @@ const LoginPage = () => {
         event.preventDefault();
         try {
             const response = await axios.post('https://gigx.onrender.com/login', formData);
-            const { token } = response.data;
+            const { token,email } = response.data;
+    
+            console.log(response);
             Cookies.set('token', token); 
+            Cookies.set('email', email);
             navigate('/');
-
         } catch (error) {
-            console.error('Error signing in:', error);
+            if (error.response && error.response.status === 401) {
+                setErrorMessage('Invalid email or password');
+            } else {
+                setErrorMessage('An error occurred. Please try again later.');
+            }
         }
     };
 
@@ -41,6 +48,8 @@ const LoginPage = () => {
                 <Link to="/" className="close-icon">
                     <FaTimes />
                 </Link>
+
+                
 
                 <form onSubmit={handleSignInSubmit}>
                     <div className="flex-container flex">
@@ -52,6 +61,7 @@ const LoginPage = () => {
                                 <input type="password" name="password" value={formData.password} placeholder="Password" className='logininput' onChange={handleChange} required />
                             </div>
                             <button type="submit" className='signinbtn'>Sign In</button>
+                            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                             <p className='forgot pointer'>Forgot Password?</p>
 
                             <p className='center'>Or</p>

@@ -1,0 +1,81 @@
+.page-container {
+
+    padding: 20px;
+  }
+  
+  .accountpageleft {
+    flex: 1;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .accountpageleft h1 {
+    color: #007bff;
+  }
+  
+  .accountpageleft h2 {
+    color: #0056b3;
+  }
+  
+  .accountpageleft div {
+    margin-top: 20px;
+  }
+  
+  .accountpageleft .flex {
+    display: flex;
+    align-items: center;
+  }
+  
+  .accountpageleft .input-container {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .accountpageright {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .accountpageright img {
+    max-width: 100%;
+    border-radius: 50%;
+  }
+  
+  .deleteBox {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .deleteBox h1 {
+    color: #dc3545;
+  }
+  
+  .deleteBox button {
+    background-color: #dc3545;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10vh;
+    transition: background-color 0.3s ease;
+  }
+  
+  .deleteBox button:hover {
+    background-color: #c82333;
+  }
+  
+ 
+  .input-container input {
+    width: 60%;
+    padding: 10px;
+    margin-right: 50px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+
+  
+  

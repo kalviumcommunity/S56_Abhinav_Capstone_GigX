@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 8vh;
 }
 
 .hero-left {
@@ -45,11 +46,12 @@
 .topFreelancers{
     justify-content: center;
     gap: 100px;
+    margin-bottom: 15vh;
     
 
 }
 .company{
-    margin: 5px 20px;
+    margin: 15vh 20px;
 }
 .companies{
     justify-content: center;
@@ -62,7 +64,7 @@
     
 }
 .working{
-    margin: 5px 20px;
+    margin: 15vh 20px;
 
 }
 .workingimg{
