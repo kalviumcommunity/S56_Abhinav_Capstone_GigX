@@ -25,10 +25,10 @@ const Nav = () => {
     <div>
       <nav className="topnav flex">
         <div className="routes flex">
-          <p>Home</p>
-          <p>Companies</p>
-          <p>Freelancers</p>
-          <p>About Us</p>
+          <Link to={"/"}> <p>Home</p></Link>
+          <Link to={"/companies"} > <p>Companies</p></Link>
+          <Link to={"/freelancers"}> <p>Freelancers</p></Link>
+          <Link to={"/aboutus"}><p>About Us</p></Link>
         </div>
 
         <div className="rightnav flex">
@@ -42,7 +42,8 @@ const Nav = () => {
       </nav>
       <div className="bottomnav flex">
         <div className="left flex">
-          <img src={logo} alt="logo" />
+          <Link to={"/"}>
+          <img src={logo} alt="logo" /></Link>
           <select defaultValue=""  >
             <option value="selected" disabled >Select Location</option>
             <option value="Delhi">Delhi</option>

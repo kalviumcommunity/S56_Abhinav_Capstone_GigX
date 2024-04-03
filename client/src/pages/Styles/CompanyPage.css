@@ -1,0 +1,42 @@
+/* CompanyPage.css */
+.companyPage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+.pic{
+  text-align: center;
+  /* height: 5px; */
+}
+  .card {
+    background-color: #dff5ff; 
+    border-radius: 10px;
+    margin: 20px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cardHeading {
+    margin-top: 0;
+    color: #004d99; 
+    text-align: center;
+    
+  }
+  
+  .cardContent {
+    margin-top: 15px;
+  }
+  
+  .cardText {
+    margin: 5px 0;
+    color: #333; /* Dark text color */
+  }
+  
