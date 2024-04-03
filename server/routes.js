@@ -3,6 +3,7 @@ const router = express.Router();
 const { userModel } = require("./models/userschema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { userValidationSchema } = require("./validator");
 require('dotenv').config();
 const jwtSecret = process.env.secretKey;
 
@@ -10,6 +11,11 @@ const jwtSecret = process.env.secretKey;
 // post req for signup
 router.post("/signup", async (req, res) => {
   try {
+    const { error } = userValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send(error.details);
+    }
+
     const { name, email, phone, role, company, password, freelancer } = req.body;
 
     const existingUser = await userModel.findOne({ email });
@@ -24,15 +30,16 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign({ email: newUser.email }, jwtSecret, {
-      expiresIn: "5h" 
+      expiresIn: "5h",
     });
-    
+
     res.status(201).send({ token, email: newUser.email });
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // post req for login 
 router.post("/login", async (req, res) => {
