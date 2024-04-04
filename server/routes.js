@@ -99,7 +99,7 @@ router.get("/users/:email", async (req, res) => {
   }
 });
 
-// updating user details
+// updating user details// updating user details
 router.put("/users/:email", async (req, res) => {
   try {
     const userEmail = req.params.email;
@@ -111,9 +111,12 @@ router.put("/users/:email", async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
+    
+    const updatedUser = await userModel.findOneAndUpdate({ email: userEmail }, updatedFields);
 
-   
-    await userModel.findOneAndUpdate({ email: userEmail }, updatedFields);
+    if (!updatedUser) {
+      return res.status(500).send("Failed to update user data");
+    }
 
     res.status(200).send("User data updated successfully");
   } catch (err) {
@@ -121,6 +124,7 @@ router.put("/users/:email", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // deleting user by email
 
