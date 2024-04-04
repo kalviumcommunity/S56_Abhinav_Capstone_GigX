@@ -32,9 +32,9 @@ const AccountPage = () => {
         const response = await axios.get(
           `http://localhost:3000/users/${userEmail}`
         );
-        const userDataFromAPI = response.data;
-        setUserData(userDataFromAPI);
-        setFreelancer(userDataFromAPI.freelancer);
+        const fetchedData = response.data;
+        setUserData(fetchedData);
+        setFreelancer(fetchedData.freelancer);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -136,6 +136,7 @@ const AccountPage = () => {
             placeholder="Company"
             onChange={(newValue) => handleChange("company", newValue)}
           />
+          
           {freelancer && (
             <>
               <AccountInput

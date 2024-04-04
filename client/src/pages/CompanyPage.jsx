@@ -3,6 +3,7 @@ import axios from 'axios';
 import "./Styles/CompanyPage.css";
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
 
 const CompanyPage = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +11,7 @@ const CompanyPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users');
+        const response = await axios.get('https://gigx.onrender.com/users');
         setUsers(response.data);
       } catch (error) {
         console.error(error);
@@ -26,6 +27,7 @@ const CompanyPage = () => {
     <div className="companyPage">
       {users.map(user => (
         !user.freelancer && (
+            <Link to={`/profile/${user.email}`} key={user._id} >
           <div key={user._id} className="card">
             <h2 className="cardHeading">{user.company}</h2>
             <div className="pic">
@@ -38,6 +40,7 @@ const CompanyPage = () => {
               <p className="cardText"><strong> {user.role} </strong></p>
             </div>
           </div>
+    </Link>
         )
       ))}
     </div>
@@ -45,5 +48,6 @@ const CompanyPage = () => {
     </>
   );
 };
+
 
 export default CompanyPage;
