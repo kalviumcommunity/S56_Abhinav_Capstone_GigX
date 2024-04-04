@@ -10,7 +10,7 @@ const CompanyPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('https://gigx.onrender.com/users');
+        const response = await axios.get('http://localhost:3000/users');
         setUsers(response.data);
       } catch (error) {
         console.error(error);

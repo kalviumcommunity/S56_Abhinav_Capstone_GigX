@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Styles/AccountPage.css";
 import { Button } from "@mui/material";
 import Nav from "../components/Nav";
@@ -7,31 +7,34 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [role, setRole] = useState("");
-  const [company, setCompany] = useState("");
-  const [nameEditMode, setNameEditMode] = useState(false);
-  const [emailEditMode, setEmailEditMode] = useState(false);
-  const [phoneEditMode, setPhoneEditMode] = useState(false);
-  const [roleEditMode, setRoleEditMode] = useState(false);
-  const [companyEditMode, setCompanyEditMode] = useState(false);
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
+    company: "",
+    skills: "",
+    location: "",
+    country: "",
+    experience: "",
+  });
+  const [editMode, setEditMode] = useState(false);
+  const [freelancer, setFreelancer] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userEmail = Cookies.get("email");
-        const response = await axios.get(`https://gigx.onrender.com/users/${userEmail}`);
-        const { name, email, phone, role, company } = response.data;
-        setName(name);
-        setEmail(email);
-        setPhone(phone);
-        setRole(role);
-        setCompany(company);
+        const response = await axios.get(
+          `http://localhost:3000/users/${userEmail}`
+        );
+        const userDataFromAPI = response.data;
+        setUserData(userDataFromAPI);
+        setFreelancer(userDataFromAPI.freelancer);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -42,12 +45,8 @@ const AccountPage = () => {
   const handleSave = async () => {
     try {
       const userEmail = Cookies.get("email");
-      await axios.put(`https://gigx.onrender.com/users/${userEmail}`, { name, email, phone, role, company });
-      setNameEditMode(false);
-      setEmailEditMode(false);
-      setPhoneEditMode(false);
-      setRoleEditMode(false);
-      setCompanyEditMode(false);
+      await axios.put(`http://localhost:3000/users/${userEmail}`, userData);
+      setEditMode(false);
     } catch (error) {
       console.error("Error updating user data:", error);
     }
@@ -56,7 +55,7 @@ const AccountPage = () => {
   const handleDeleteAccount = async () => {
     try {
       const userEmail = Cookies.get("email");
-      await axios.delete(`https://gigx.onrender.com/users/${userEmail}`);
+      await axios.delete(`http://localhost:3000/users/${userEmail}`);
       Cookies.remove("email");
       Cookies.remove("token");
       navigate("/");
@@ -65,83 +64,111 @@ const AccountPage = () => {
     }
   };
 
+  const handleEditMode = () => {
+    setEditMode(!editMode);
+  };
+
+  const handleChange = (fieldName, newValue) => {
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      [fieldName]: newValue,
+    }));
+  };
+
   return (
     <>
       <Nav />
       <div className="page-container flex">
-        <div className="accountpageleft">
-          <h1>Hi, {name}</h1>
-          <h2>Account Details</h2>
-          <div className="nameDiv flex input-container">
-            <input type="text" placeholder="Name" value={name} readOnly={!nameEditMode} onChange={(e) => setName(e.target.value)} />
-            {nameEditMode ? (
-              <>
-                <Button variant="contained" className="accountBtn" onClick={handleSave}>
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button variant="outlined" className="accountBtn" onClick={() => setNameEditMode(true)}>
-                Edit
+        <div className="accountpageleft ">
+          <h1>Hi, {userData.name}</h1>
+          <div className="account-details flex">
+            <h2>Account Details</h2>
+            <Button
+              variant="outlined"
+              className="accountBtn"
+              onClick={handleEditMode}
+            >
+              {editMode ? "Cancel" : "Edit"}
+            </Button>
+            {editMode && (
+              <Button
+                variant="contained"
+                className="accountBtn"
+                onClick={handleSave}
+              >
+                Save
               </Button>
             )}
           </div>
-          <div className="emailDiv flex input-container">
-            <input type="email" placeholder="Email" value={email} readOnly={!emailEditMode} onChange={(e) => setEmail(e.target.value)} />
-            {emailEditMode ? (
-              <>
-                <Button variant="contained" className="accountBtn" onClick={handleSave}>
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button variant="outlined" className="accountBtn" onClick={() => setEmailEditMode(true)}>
-                Edit
-              </Button>
-            )}
-          </div>
-          <div className="phoneDiv flex input-container">
-            <input type="text" placeholder="Phone" value={phone} readOnly={!phoneEditMode} onChange={(e) => setPhone(e.target.value)} />
-            {phoneEditMode ? (
-              <>
-                <Button variant="contained" className="accountBtn" onClick={handleSave}>
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button variant="outlined" className="accountBtn" onClick={() => setPhoneEditMode(true)}>
-                Edit
-              </Button>
-            )}
-          </div>
-          <div className="roleDiv flex input-container">
-            <input type="text" placeholder="Role" value={role} readOnly={!roleEditMode} onChange={(e) => setRole(e.target.value)} />
-            {roleEditMode ? (
-              <>
-                <Button variant="contained" className="accountBtn" onClick={handleSave}>
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button variant="outlined" className="accountBtn" onClick={() => setRoleEditMode(true)}>
-                Edit
-              </Button>
-            )}
-          </div>
-          <div className="companyDiv flex input-container">
-            <input type="text" placeholder="Company" value={company} readOnly={!companyEditMode} onChange={(e) => setCompany(e.target.value)} />
-            {companyEditMode ? (
-              <>
-                <Button variant="contained" className="accountBtn" onClick={handleSave}>
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button variant="outlined" className="accountBtn" onClick={() => setCompanyEditMode(true)}>
-                Edit
-              </Button>
-            )}
-          </div>
+
+          <AccountInput
+            fieldName="name"
+            value={userData.name}
+            editMode={editMode}
+            placeholder="Name"
+            onChange={(newValue) => handleChange("name", newValue)}
+          />
+          <AccountInput
+            fieldName="email"
+            value={userData.email}
+            editMode={editMode}
+            placeholder="Email"
+            onChange={(newValue) => handleChange("email", newValue)}
+          />
+          <AccountInput
+            fieldName="phone"
+            value={userData.phone}
+            editMode={editMode}
+            placeholder="Phone"
+            onChange={(newValue) => handleChange("phone", newValue)}
+          />
+          <AccountInput
+            fieldName="role"
+            value={userData.role}
+            editMode={editMode}
+            placeholder="Role"
+            onChange={(newValue) => handleChange("role", newValue)}
+          />
+          <AccountInput
+            fieldName="company"
+            value={userData.company}
+            editMode={editMode}
+            placeholder="Company"
+            onChange={(newValue) => handleChange("company", newValue)}
+          />
+          {freelancer && (
+            <>
+              <AccountInput
+                fieldName="skills"
+                value={userData.skills}
+                editMode={editMode}
+                placeholder="Skills"
+                onChange={(newValue) => handleChange("skills", newValue)}
+              />
+              <AccountInput
+                fieldName="location"
+                value={userData.location}
+                editMode={editMode}
+                placeholder="Location"
+                onChange={(newValue) => handleChange("location", newValue)}
+              />
+              <AccountInput
+                fieldName="country"
+                value={userData.country}
+                editMode={editMode}
+                placeholder="Country"
+                onChange={(newValue) => handleChange("country", newValue)}
+              />
+              <AccountInput
+                fieldName="experience"
+                value={userData.experience}
+                editMode={editMode}
+                placeholder="Experience"
+                onChange={(newValue) => handleChange("experience", newValue)}
+              />
+            </>
+          )}
+
           <h1>Active Projects</h1>
           <div>
             <h3>Project Name</h3>

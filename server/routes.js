@@ -103,10 +103,17 @@ router.get("/users/:email", async (req, res) => {
 router.put("/users/:email", async (req, res) => {
   try {
     const userEmail = req.params.email;
-    const { name, email } = req.body; 
+    const { name, email, phone, role, company, skills, location, country, experience } = req.body;
 
-    
-    await userModel.findOneAndUpdate({ email: userEmail }, { name, email });
+    const updatedFields = { name, email, phone, role, company, skills, location, country, experience };
+
+    const user = await userModel.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+   
+    await userModel.findOneAndUpdate({ email: userEmail }, updatedFields);
 
     res.status(200).send("User data updated successfully");
   } catch (err) {
