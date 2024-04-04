@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom"
 import CompanyPage from "./pages/CompanyPage"
 import FreelancersPage from "./pages/FreelancersPage"
 import AccountPage from "./pages/AccountPage"
+import ProfileDisplay from "./pages/ProfileDisplay"
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/companies" element={<CompanyPage />} />
         <Route path="/freelancers" element={<FreelancersPage/>} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/profile/:email" element={<ProfileDisplay />} />
 
 
       </Routes>

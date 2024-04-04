@@ -8,9 +8,11 @@ const userSchema = mongoose.Schema({
     company: String,
     password: String, 
     freelancer: Boolean,
+    skills: [String],
+    location: String,
+    country: String,
+    experience: String
 }, { versionKey: false });
-
-
 
 const userModel = mongoose.model("user-colls", userSchema);
 

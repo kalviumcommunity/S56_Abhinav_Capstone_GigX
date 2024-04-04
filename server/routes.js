@@ -99,14 +99,24 @@ router.get("/users/:email", async (req, res) => {
   }
 });
 
-// updating user details
+// updating user details// updating user details
 router.put("/users/:email", async (req, res) => {
   try {
     const userEmail = req.params.email;
-    const { name, email } = req.body; 
+    const { name, email, phone, role, company, skills, location, country, experience } = req.body;
 
+    const updatedFields = { name, email, phone, role, company, skills, location, country, experience };
+
+    const user = await userModel.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
     
-    await userModel.findOneAndUpdate({ email: userEmail }, { name, email });
+    const updatedUser = await userModel.findOneAndUpdate({ email: userEmail }, updatedFields);
+
+    if (!updatedUser) {
+      return res.status(500).send("Failed to update user data");
+    }
 
     res.status(200).send("User data updated successfully");
   } catch (err) {
@@ -114,6 +124,7 @@ router.put("/users/:email", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // deleting user by email
 
