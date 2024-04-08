@@ -8,13 +8,13 @@ import CompanyPage from "./pages/CompanyPage"
 import FreelancersPage from "./pages/FreelancersPage"
 import AccountPage from "./pages/AccountPage"
 import ProfileDisplay from "./pages/ProfileDisplay"
+import AboutUsPage from "./pages/AboutUsPage"
 
 function App() {
 
   return (
     <>
-      {/* <Nav /> */}
-      {/* <LandingPage /> */}
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -23,6 +23,7 @@ function App() {
         <Route path="/freelancers" element={<FreelancersPage/>} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/profile/:email" element={<ProfileDisplay />} />
+        <Route path="/aboutus" element={<AboutUsPage />} />
 
 
       </Routes>

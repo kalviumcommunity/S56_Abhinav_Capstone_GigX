@@ -30,7 +30,7 @@ const AccountPage = () => {
       try {
         const userEmail = Cookies.get("email");
         const response = await axios.get(
-          `https://gigx.onrender.com//users/${userEmail}`
+          `https://gigx.onrender.com/users/${userEmail}`
         );
         const fetchedData = response.data;
         setUserData(fetchedData);
@@ -45,7 +45,7 @@ const AccountPage = () => {
   const handleSave = async () => {
     try {
       const userEmail = Cookies.get("email");
-      await axios.put(`https://gigx.onrender.com//users/${userEmail}`, userData);
+      await axios.put(`https://gigx.onrender.com/users/${userEmail}`, userData);
       setEditMode(false);
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -55,7 +55,7 @@ const AccountPage = () => {
   const handleDeleteAccount = async () => {
     try {
       const userEmail = Cookies.get("email");
-      await axios.delete(`https://gigx.onrender.com//users/${userEmail}`);
+      await axios.delete(`https://gigx.onrender.com/users/${userEmail}`);
       Cookies.remove("email");
       Cookies.remove("token");
       navigate("/");

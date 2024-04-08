@@ -1,0 +1,126 @@
+
+  
+ 
+  
+  .aboutus-main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px auto;
+    width: 80%;
+  }
+  
+  
+  .about-left {
+    width: 50%;
+    padding: 20px;
+  }
+  
+  .about-left h1 {
+    color: #547BF4;
+  }
+  
+  .about-left p {
+    color: #34495e;
+  }
+  
+  
+  .about-right img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  
+  .features {
+    text-align: center;
+    width: 40%;
+    margin: 100px auto;
+  }
+  
+  .features h1 {
+    color: #547BF4;
+  }
+  
+  .features p {
+    color: #34495e;
+  }
+  
+  
+  .features-block {
+    display: flex;
+    justify-content: space-between;
+    margin: 50px auto;
+    width: 80%;
+  }
+  
+  .feature-1,
+  .feature-2,
+  .feature-3 {
+    width: 30%;
+    padding: 20px;
+   
+    text-align: center;
+    border-radius: 10px;
+  }
+  
+  .feature-1 h2,
+  .feature-2 h2,
+  .feature-3 h2 {
+    color: #547BF4;
+  }
+  
+  .feature-1 p,
+  .feature-2 p,
+  .feature-3 p {
+    color: #34495e;
+  }
+  
+  
+  .community {
+    text-align: center;
+    width: 40%;
+    margin: 100px auto;
+  }
+  
+  .community h1 {
+    color: #547BF4;
+  }
+  
+  .community p {
+    color: #34495e;
+  }
+  
+  
+  .recruiters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px auto;
+  }
+  
+  .recruiters img {
+    width: 100px;
+    margin: 0 20px;
+  }
+  
+  
+  .btns-about {
+    text-align: center;
+    margin: 100px auto;
+  }
+  
+  .btns-about .btn {
+    background-color: #547BF4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  
+  .btns-about .btn:hover {
+    background-color: #3498db;
+  }
+
+  
