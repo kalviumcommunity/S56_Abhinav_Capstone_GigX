@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
+  const userAPI="https://gigx.onrender.com/users"
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -30,7 +31,7 @@ const AccountPage = () => {
       try {
         const userEmail = Cookies.get("email");
         const response = await axios.get(
-          `https://gigx.onrender.com/users/${userEmail}`
+          `${userAPI}/${userEmail}`
         );
         const fetchedData = response.data;
         setUserData(fetchedData);
@@ -45,7 +46,7 @@ const AccountPage = () => {
   const handleSave = async () => {
     try {
       const userEmail = Cookies.get("email");
-      await axios.put(`https://gigx.onrender.com/users/${userEmail}`, userData);
+      await axios.put(`${userAPI}/${userEmail}`, userData);
       setEditMode(false);
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -55,7 +56,7 @@ const AccountPage = () => {
   const handleDeleteAccount = async () => {
     try {
       const userEmail = Cookies.get("email");
-      await axios.delete(`https://gigx.onrender.com/users/${userEmail}`);
+      await axios.delete(`${userAPI}/${userEmail}`);
       Cookies.remove("email");
       Cookies.remove("token");
       navigate("/");

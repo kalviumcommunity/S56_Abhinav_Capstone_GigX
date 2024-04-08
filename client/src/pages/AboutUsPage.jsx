@@ -18,7 +18,7 @@ const AboutUsPage = () => {
         <div className="about-right">
           <img
             src={aboutusworker}
-            alt="" height={400}
+            alt="worker" height={400}
           />
         </div>
       </div>
