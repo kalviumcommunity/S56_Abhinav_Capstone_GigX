@@ -9,6 +9,7 @@ import FreelancersPage from "./pages/FreelancersPage"
 import AccountPage from "./pages/AccountPage"
 import ProfileDisplay from "./pages/ProfileDisplay"
 import AboutUsPage from "./pages/AboutUsPage"
+import ContactUs from "./pages/ContactUs"
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/profile/:email" element={<ProfileDisplay />} />
         <Route path="/aboutus" element={<AboutUsPage />} />
+        <Route path="/contactus" element={<ContactUs />} />
 
 
       </Routes>

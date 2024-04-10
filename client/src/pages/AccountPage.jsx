@@ -10,7 +10,9 @@ import { useNavigate } from "react-router-dom";
 import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
+
   const userAPI="https://gigx.onrender.com/users"
+
   const [userData, setUserData] = useState({
     name: "",
     email: "",

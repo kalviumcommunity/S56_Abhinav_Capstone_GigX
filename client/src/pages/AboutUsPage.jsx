@@ -24,7 +24,10 @@ const AboutUsPage = () => {
       </div>
       <div className="features">
         <h1>The Future of Work</h1>
+
         <p>Embracing the gig economy. Our platform provides the tools and support for seamless collaboration between businesses and freelancers.</p>
+
+    
       </div>
 
       <div className="features-block">

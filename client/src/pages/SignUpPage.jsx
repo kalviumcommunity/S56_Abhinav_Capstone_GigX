@@ -31,6 +31,7 @@ const SignUpPage = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
     try {
+
       const  response= await axios.post('https://gigx.onrender.com/signup', formData);
       const { token,email } = response.data;
 

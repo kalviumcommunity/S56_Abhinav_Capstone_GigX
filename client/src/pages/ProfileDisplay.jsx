@@ -15,7 +15,9 @@ const ProfileDisplay = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+
         const response = await axios.get(`https://gigx.onrender.com/users/${email}`);
+
         setUser(response.data);
         setLoading(false);
       } catch (error) {
