@@ -1,23 +1,29 @@
 import React from 'react';
 import "./Styles/Footer.css";
 import logo from "../assets/logo.png";
+import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
+
 return (
     <div className="footer-container">
         <div className="footer">
             <div className="footer-left">
-                <img src={logo} alt="Company Logo" />
+               <Link to={"/"}> <img src={logo} alt="Company Logo" /></Link>
                 <p>GigX connects businesses with top-rated freelancers, using AI to streamline projects and empower freelance success.</p>
             </div>
             <div className="footer-center">
                 <h3>Company</h3>
                 <ul>
-                    <li>About</li>
+                    <Link to={"/aboutus"}><li>About</li></Link>
                     <li>Team</li>
                     <li>Careers</li>
-                    <li>Contact</li>
+                    <Link to={"/contactus"}><li>Contact</li></Link>
                 </ul>
             </div>
             <div className="footer-right">

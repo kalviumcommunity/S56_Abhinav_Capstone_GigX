@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
+  const userAPI="http://localhost:3000/users"
   const [userData, setUserData] = useState({
     name: "",
     email: "",

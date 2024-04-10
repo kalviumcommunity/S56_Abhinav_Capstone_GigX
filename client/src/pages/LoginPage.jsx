@@ -26,7 +26,7 @@ const LoginPage = () => {
     const handleSignInSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('https://gigx.onrender.com//login', formData);
+            const response = await axios.post('http://localhost:3000/login', formData);
             const { token,email } = response.data;
     
             console.log(response);
