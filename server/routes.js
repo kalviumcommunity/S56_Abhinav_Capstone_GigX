@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { userModel } = require("./models/userschema");
+const { contactModel } = require("./models/contactschema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { userValidationSchema } = require("./validator");
@@ -134,6 +135,21 @@ router.delete("/users/:email", async (req, res) => {
     await userModel.findOneAndDelete({ email: userEmail });
 
     res.status(200).send("User account deleted successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// post req for contact form
+router.post("/contact", async (req, res) => {
+  try {
+    const { name, email, phone, message } = req.body;
+    const newContact = new contactModel({ name, email, phone, message });
+  
+    await newContact.save();
+
+    res.status(201).send("Form data submitted successfully");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
