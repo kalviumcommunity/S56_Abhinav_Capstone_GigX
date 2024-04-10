@@ -14,6 +14,15 @@ const userValidationSchema = Joi.object({
     experience: Joi.string()
 });
 
+// contact us validation
+const contactValidationSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().pattern(/^\+(?:[0-9] ?){6,14}[0-9]$/).required(),
+    message: Joi.string().required()
+});
+
 module.exports = {
-    userValidationSchema
+    userValidationSchema,
+    contactValidationSchema
 };

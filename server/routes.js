@@ -4,7 +4,7 @@ const { userModel } = require("./models/userschema");
 const { contactModel } = require("./models/contactschema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { userValidationSchema } = require("./validator");
+const { userValidationSchema, contactValidationSchema } = require("./validator");
 require('dotenv').config();
 const jwtSecret = process.env.secretKey;
 
@@ -100,7 +100,7 @@ router.get("/users/:email", async (req, res) => {
   }
 });
 
-// updating user details// updating user details
+// updating user details
 router.put("/users/:email", async (req, res) => {
   try {
     const userEmail = req.params.email;
@@ -144,6 +144,11 @@ router.delete("/users/:email", async (req, res) => {
 // post req for contact form
 router.post("/contact", async (req, res) => {
   try {
+    const { error } = contactValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send(error.details);
+    }
+    
     const { name, email, phone, message } = req.body;
     const newContact = new contactModel({ name, email, phone, message });
   
