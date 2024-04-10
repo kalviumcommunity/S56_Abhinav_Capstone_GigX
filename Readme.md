@@ -19,5 +19,3 @@ GigX will consist of two main user interfaces:
 - Allows freelancers to create profiles showcasing their skills, experience, portfolio, rates, and availability.
 - Enables applying for projects with detailed proposals outlining approach, timeline, and pricing.
 - Offers communication channels with clients to discuss project details and negotiate terms. 💬
-
-# Stay tuned for more information and live demo of this project
