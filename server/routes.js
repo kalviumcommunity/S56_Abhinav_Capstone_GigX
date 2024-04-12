@@ -8,7 +8,6 @@ const { userValidationSchema, contactValidationSchema } = require("./validator")
 require('dotenv').config();
 const jwtSecret = process.env.secretKey;
 
-
 // post req for signup
 router.post("/signup", async (req, res) => {
   try {
@@ -17,7 +16,7 @@ router.post("/signup", async (req, res) => {
       return res.status(400).send(error.details);
     }
 
-    const { name, email, phone, role, company, password, freelancer } = req.body;
+    const { name, email, phone, role, company, password, freelancer, skills } = req.body;
 
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -26,7 +25,7 @@ router.post("/signup", async (req, res) => {
 
     const hash = await bcrypt.hash(password, 5);
 
-    const newUser = new userModel({ name, email, phone, role, company, password: hash, freelancer });
+    const newUser = new userModel({ name, email, phone, role, company, password: hash, freelancer, skills });
 
     await newUser.save();
 
@@ -40,7 +39,6 @@ router.post("/signup", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 // post req for login 
 router.post("/login", async (req, res) => {
@@ -70,18 +68,33 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
-
 // getting all data in the user database
 router.get("/users", async (req, res) => {
   try {
-    const users = await userModel.find({});
+    
+    const sanitizedLocation = req.query.location ? req.query.location.replace(/[0-9]/g, '') : '';
+    const sanitizedKeyword = req.query.keyword ? req.query.keyword.replace(/[0-9]/g, '') : '';
+    
+    let query = {}; 
+    if (sanitizedLocation && typeof sanitizedLocation === 'string') {
+      query.location = sanitizedLocation;
+    }
+    if (sanitizedKeyword && typeof sanitizedKeyword === 'string') {
+      query.$or = [
+        { name: { $regex: sanitizedKeyword, $options: "i" } },
+        { skills: { $regex: sanitizedKeyword, $options: "i" } },
+      ];
+    }
+
+    const users = await userModel.find(query);
     res.status(200).send(users);
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 
 // getting users by email
 router.get("/users/:email", async (req, res) => {
@@ -126,9 +139,7 @@ router.put("/users/:email", async (req, res) => {
   }
 });
 
-
 // deleting user by email
-
 router.delete("/users/:email", async (req, res) => {
   try {
     const userEmail = req.params.email;

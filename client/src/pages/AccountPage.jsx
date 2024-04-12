@@ -11,7 +11,7 @@ import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
 
-  const userAPI="https://gigx.onrender.com/users"
+  const userAPI="https://gigx.onrender.com/users";
 
   const [userData, setUserData] = useState({
     name: "",
@@ -19,7 +19,7 @@ const AccountPage = () => {
     phone: "",
     role: "",
     company: "",
-    skills: "",
+    skills: [],
     location: "",
     country: "",
     experience: "",
@@ -72,11 +72,14 @@ const AccountPage = () => {
   };
 
   const handleChange = (fieldName, newValue) => {
+    const trimmedSkills = newValue.split(",").map(skill => skill.trim());
+    
     setUserData((prevUserData) => ({
       ...prevUserData,
-      [fieldName]: newValue,
+      [fieldName]: trimmedSkills,
     }));
   };
+  
 
   return (
     <>
@@ -144,10 +147,10 @@ const AccountPage = () => {
             <>
               <AccountInput
                 fieldName="skills"
-                value={userData.skills}
+                value={userData.skills.join(",")}
                 editMode={editMode}
                 placeholder="Skills"
-                onChange={(newValue) => handleChange("skills", newValue)}
+                onChange={(newValue) => handleChange("skills", newValue.split(","))}
               />
               <AccountInput
                 fieldName="location"
