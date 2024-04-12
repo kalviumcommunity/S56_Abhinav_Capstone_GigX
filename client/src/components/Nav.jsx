@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 
 const Nav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +18,21 @@ const Nav = () => {
     setIsLoggedIn(!!userCookie); 
   }, []);
 
+  useEffect(() => {
+    if (selectedLocation) {
+      navigate(`/freelancers?location=${selectedLocation}`);
+    }
+  }, [selectedLocation]);
+
   const handleLogout = () => {
     Cookies.remove("token"); 
     Cookies.remove("email");
     setIsLoggedIn(false); 
     navigate("/");
+  };
+
+  const handleLocationChange = (e) => {
+    setSelectedLocation(e.target.value);
   };
 
   return (
@@ -47,8 +58,8 @@ const Nav = () => {
         <div className="left flex">
           <Link to={"/"}>
           <img src={logo} alt="logo" /></Link>
-          <select defaultValue=""  >
-            <option value="selected" disabled >Select Location</option>
+          <select value={selectedLocation} onChange={handleLocationChange}>
+            <option value="" disabled >Select Location</option>
             <option value="Delhi">Delhi</option>
             <option value="Mumbai">Mumbai</option>
             <option value="Bangalore">Bangalore</option>
