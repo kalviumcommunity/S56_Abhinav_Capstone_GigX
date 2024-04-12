@@ -11,7 +11,7 @@ import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
 
-  const userAPI="http://localhost:3000/users";
+  const userAPI="https://gigx.onrender.com/users";
 
   const [userData, setUserData] = useState({
     name: "",
@@ -72,11 +72,14 @@ const AccountPage = () => {
   };
 
   const handleChange = (fieldName, newValue) => {
+    const trimmedSkills = newValue.split(",").map(skill => skill.trim());
+    
     setUserData((prevUserData) => ({
       ...prevUserData,
-      [fieldName]: newValue,
+      [fieldName]: trimmedSkills,
     }));
   };
+  
 
   return (
     <>

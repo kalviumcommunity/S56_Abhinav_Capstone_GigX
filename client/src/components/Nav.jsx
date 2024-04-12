@@ -32,7 +32,9 @@ const Nav = () => {
   };
 
   const handleLocationChange = (e) => {
-    setSelectedLocation(e.target.value);
+    const locationValue = e.target.value;
+    console.log("Selected Location:", locationValue);
+    setSelectedLocation(locationValue);
   };
 
   return (

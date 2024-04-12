@@ -71,16 +71,18 @@ router.post("/login", async (req, res) => {
 // getting all data in the user database
 router.get("/users", async (req, res) => {
   try {
+    
+    const sanitizedLocation = req.query.location ? req.query.location.replace(/[0-9]/g, '') : '';
+    const sanitizedKeyword = req.query.keyword ? req.query.keyword.replace(/[0-9]/g, '') : '';
+    
     let query = {}; 
-
-    if (req.query.location) {
-      query.location = req.query.location;
+    if (sanitizedLocation && typeof sanitizedLocation === 'string') {
+      query.location = sanitizedLocation;
     }
-
-    if (req.query.keyword) {
+    if (sanitizedKeyword && typeof sanitizedKeyword === 'string') {
       query.$or = [
-        { name: { $regex: req.query.keyword, $options: "i" } },
-        { skills: { $regex: req.query.keyword, $options: "i" } },
+        { name: { $regex: sanitizedKeyword, $options: "i" } },
+        { skills: { $regex: sanitizedKeyword, $options: "i" } },
       ];
     }
 
@@ -91,6 +93,7 @@ router.get("/users", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 
 // getting users by email

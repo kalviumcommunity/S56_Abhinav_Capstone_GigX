@@ -4,12 +4,30 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { Link, useLocation } from 'react-router-dom';
 
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
 const FreelancersPage = () => {
   const [users, setUsers] = useState([]);
   const location = useLocation();
   const [selectedLocation, setSelectedLocation] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearchInput = useDebounce(searchInput, 500);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,7 +36,7 @@ const FreelancersPage = () => {
         const locationParam = queryParams.get('location');
         const keywordParam = queryParams.get('keyword');
 
-        let apiUrl = 'http://localhost:3000/users';
+        let apiUrl = 'https://gigx.onrender.com/users';
 
         if (locationParam || keywordParam) {
           apiUrl += `?location=${locationParam || ''}&keyword=${keywordParam || ''}`;
@@ -30,24 +48,31 @@ const FreelancersPage = () => {
         const response = await axios.get(apiUrl);
         setUsers(response.data);
         setIsLoading(false);
+        setError('');
       } catch (error) {
         console.error(error);
-        setError('Requested freelancer not found');
+        setError('Failed to fetch freelancers. Please try again later.');
         setIsLoading(false);
       }
     };
 
     fetchUsers();
-  }, [location, selectedLocation]);
+  }, [location, selectedLocation, debouncedSearchInput]);
+
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
 
   return (
     <>
-      <Nav setSelectedLocation={setSelectedLocation} />
+      <Nav setSelectedLocation={setSelectedLocation} handleSearchInputChange={handleSearchInputChange} />
       <div className="companyPage">
         {isLoading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
+        ) : users.length === 0 ? (
+          <p>No freelancers found for {selectedLocation}</p>
         ) : (
           users.map(user => (
             user.freelancer && (
