@@ -11,7 +11,7 @@ const SearchResult = ({ location }) => {
     useEffect(() => {
       const fetchSearchResults = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/search?keyword=${keyword}`);
+          const response = await axios.get(`https://gigx.onrender.com/search?keyword=${keyword}`);
           setSearchResults(response.data);
           console.log("Search results:", response.data);
         } catch (error) {
