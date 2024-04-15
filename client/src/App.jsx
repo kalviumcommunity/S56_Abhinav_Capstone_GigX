@@ -10,6 +10,7 @@ import AccountPage from "./pages/AccountPage"
 import ProfileDisplay from "./pages/ProfileDisplay"
 import AboutUsPage from "./pages/AboutUsPage"
 import ContactUs from "./pages/ContactUs"
+import SearchResult from "./pages/SearchResult"
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/profile/:email" element={<ProfileDisplay />} />
         <Route path="/aboutus" element={<AboutUsPage />} />
         <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/search" element={<SearchResult location={location} />} />
 
 
       </Routes>
