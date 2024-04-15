@@ -4,41 +4,53 @@ import pf1 from "../assets/Profiles/pf1.png";
 import Nav from "../components/Nav";
 
 const SearchResult = ({ location }) => {
-    const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
-    const keyword = new URLSearchParams(location.search).get("keyword");
-  
-    useEffect(() => {
-      const fetchSearchResults = async () => {
-        try {
-          const response = await axios.get(`https://gigx.onrender.com/search?keyword=${keyword}`);
-          setSearchResults(response.data);
-          console.log("Search results:", response.data);
-        } catch (error) {
-          console.error("Error fetching search results:", error);
-        }
-      };
-  
-      if (keyword) {
-        fetchSearchResults();
+  const keyword = new URLSearchParams(location.search).get("keyword");
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        const response = await axios.get(
+          `https://gigx.onrender.com/search?keyword=${keyword}`
+        );
+        setSearchResults(response.data);
+        console.log("Search results:", response.data);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
       }
-    }, [keyword]);
-  
-    return (
-      <div>
-        <Nav />
-        <h2>Search Results for "{keyword}"</h2>
+    };
+
+    if (keyword) {
+      fetchSearchResults();
+    }
+  }, [keyword]);
+
+  return (
+    <div>
+      <Nav />
+      <h2>Search Results for "{keyword}"</h2>
+      {searchResults.length === 0 ? (
+        <p>No results found for your search.</p>
+      ) : (
         <div className="search-results">
-          {searchResults.map(user => (
+          {searchResults.map((user) => (
             <div key={user._id} className="profile-info">
-              <img src={pf1} alt={user.name} className="profile-pic" width={"50px"} />
+              <img
+                src={pf1}
+                alt={user.name}
+                className="profile-pic"
+                width={"50px"}
+              />
               <div className="info">
                 <h3 className="name">{user.name}</h3>
                 <p> {user.email}</p>
                 {user.freelancer ? (
-                    <div className="div">
-                  <p>Freelancer</p>
-                  <p>{user.location}, {user.country}</p>
+                  <div className="div">
+                    <p>Freelancer</p>
+                    <p>
+                      {user.location}, {user.country}
+                    </p>
                   </div>
                 ) : (
                   <p>Company</p>
@@ -47,8 +59,9 @@ const SearchResult = ({ location }) => {
             </div>
           ))}
         </div>
-      </div>
-    );
-  };
-  
-  export default SearchResult;
+      )}
+    </div>
+  );
+};
+
+export default SearchResult;

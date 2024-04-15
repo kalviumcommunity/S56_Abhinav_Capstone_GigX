@@ -11,13 +11,18 @@ import Cookies from "js-cookie";
 const Nav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("");
-  const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const userCookie = Cookies.get("token");
     setIsLoggedIn(!!userCookie); 
   }, []);
+
+  useEffect(() => {
+    if (selectedLocation) {
+      navigate(`/freelancers?location=${selectedLocation}`);
+    }
+  }, [selectedLocation]);
 
   const handleLogout = () => {
     Cookies.remove("token"); 
@@ -28,16 +33,8 @@ const Nav = () => {
 
   const handleLocationChange = (e) => {
     const locationValue = e.target.value;
+    console.log("Selected Location:", locationValue);
     setSelectedLocation(locationValue);
-  };
-
-  const handleSearch = () => {
-    navigate(`/search?keyword=${searchKeyword}`);
-  };
-
-  const handleSearchChange = (e) => {
-    const keyword = e.target.value;
-    setSearchKeyword(keyword);
   };
 
   return (
@@ -83,10 +80,8 @@ const Nav = () => {
             label="Search Here"
             variant="standard"
             className="search"
-            value={searchKeyword}
-            onChange={handleSearchChange}
           />
-          <FaSearch className="searchicon" onClick={handleSearch} />
+          <FaSearch className="searchicon" />
         </div>
         <div className="right flex">
           {isLoggedIn ? (
