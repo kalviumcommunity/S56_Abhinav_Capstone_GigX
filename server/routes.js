@@ -172,4 +172,30 @@ router.post("/contact", async (req, res) => {
   }
 });
 
+router.get("/search", async (req, res) => {
+  try {
+    const { keyword } = req.query;
+
+    if (!keyword) {
+      return res.status(400).send("Keyword parameter is required");
+    }
+
+   
+    const query = {
+      $or: [
+        { name: { $regex: keyword, $options: "i" } }, 
+        { skills: { $regex: keyword, $options: "i" } }
+      ]
+    };
+
+    
+    const users = await userModel.find(query);
+
+    res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = router;
