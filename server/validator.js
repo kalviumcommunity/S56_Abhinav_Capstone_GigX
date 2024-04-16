@@ -3,7 +3,7 @@ const Joi = require('joi');
 const userValidationSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().pattern(/^\+(?:[0-9] ?){6,14}[0-9]$/).required(),
+    phone: Joi.string().pattern(/^[0-9]{6,14}$/).required(), 
     role: Joi.string().required(),
     company: Joi.string(),
     password: Joi.string().required(),
@@ -18,7 +18,7 @@ const userValidationSchema = Joi.object({
 const contactValidationSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().pattern(/^\+(?:[0-9] ?){6,14}[0-9]$/).required(),
+    phone: Joi.string().pattern(/^[0-9]{6,14}$/).required(), 
     message: Joi.string().required()
 });
 

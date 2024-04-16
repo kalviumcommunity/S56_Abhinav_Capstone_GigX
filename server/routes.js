@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { userModel } = require("./models/userschema");
 const { contactModel } = require("./models/contactschema");
+const { ratingModel } = require("./models/ratingschema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { userValidationSchema, contactValidationSchema } = require("./validator");
 require('dotenv').config();
 const jwtSecret = process.env.secretKey;
+
 
 // post req for signup
 router.post("/signup", async (req, res) => {
@@ -68,7 +70,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// getting all data in the user database
+// fetching all data in the user database
 router.get("/users", async (req, res) => {
   try {
     
@@ -96,7 +98,7 @@ router.get("/users", async (req, res) => {
 
 
 
-// getting users by email
+// fetching users by email
 router.get("/users/:email", async (req, res) => {
   try {
     const userEmail = req.params.email; 
@@ -121,18 +123,13 @@ router.put("/users/:email", async (req, res) => {
 
     const updatedFields = { name, email, phone, role, company, skills, location, country, experience };
 
-    const user = await userModel.findOne({ email: userEmail });
+    const user = await userModel.findOneAndUpdate({ email: userEmail }, updatedFields, { new: true });
+
     if (!user) {
       return res.status(404).send("User not found");
     }
-    
-    const updatedUser = await userModel.findOneAndUpdate({ email: userEmail }, updatedFields);
 
-    if (!updatedUser) {
-      return res.status(500).send("Failed to update user data");
-    }
-
-    res.status(200).send("User data updated successfully");
+    res.status(200).send(user);
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -197,5 +194,71 @@ router.get("/search", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+// get req for gettign all the data in the collection
+router.get("/ratings", async (req, res) => {
+  try {
+    const ratings = await ratingModel.find();
+    res.status(200).send(ratings);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+// post req for adding rating
+router.post("/ratings", async (req, res) => {
+  try {
+    const { email, ratedBy, rating } = req.body;
+
+    
+    const existingRating = await ratingModel.findOne({ email });
+    if (existingRating) {
+      const alreadyRated = existingRating.ratings.find(r => r.ratedBy === ratedBy);
+      if (alreadyRated) {
+        
+        alreadyRated.rating = rating;
+        await existingRating.save();
+        return res.status(200).send("Rating updated successfully");
+      }
+      
+      existingRating.ratings.push({ ratedBy, rating });
+      await existingRating.save();
+      return res.status(201).send("Rating added successfully");
+    }
+
+    
+    const newRating = new ratingModel({
+      email,
+      ratings: [{ ratedBy, rating }]
+    });
+    await newRating.save();
+
+    res.status(201).send("Rating saved successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// get req for fetching rating by email
+
+router.get("/ratings/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    const ratings = await ratingModel.findOne({ email });
+
+    if (!ratings) {
+      return res.status(404).send("Ratings not found");
+    }
+    const ratedByCount = ratings.ratings.length;
+    const ratingSum = ratings.ratings.reduce((sum, rating) => sum + rating.rating, 0);
+    const avgRating = ratedByCount > 0 ? ratingSum / ratedByCount : 0;
+    res.status(200).json({ ...ratings.toObject(), avgRating });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 module.exports = router;

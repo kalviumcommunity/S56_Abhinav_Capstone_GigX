@@ -11,7 +11,7 @@ import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
 
-  const userAPI="https://gigx.onrender.com/users";
+  const userAPI="http://localhost:3000/users";
 
   const [userData, setUserData] = useState({
     name: "",
@@ -72,13 +72,26 @@ const AccountPage = () => {
   };
 
   const handleChange = (fieldName, newValue) => {
-    const trimmedSkills = newValue.split(",").map(skill => skill.trim());
+    console.log(fieldName, newValue);
+    let updatedValue = newValue;
+    
+    
+    if (Array.isArray(newValue)) {
+      updatedValue = newValue;
+    } else if (typeof newValue === 'string') {
+    
+      updatedValue = newValue.trim();
+    } else {
+      console.error("Invalid data type for newValue");
+      return;
+    }
     
     setUserData((prevUserData) => ({
       ...prevUserData,
-      [fieldName]: trimmedSkills,
+      [fieldName]: updatedValue,
     }));
   };
+  
   
 
   return (
