@@ -36,7 +36,7 @@ const FreelancersPage = () => {
         const locationParam = queryParams.get('location');
         const keywordParam = queryParams.get('keyword');
 
-        let apiUrl = 'http://localhost:3000/users';
+        let apiUrl = 'https://gigx.onrender.com/users';
 
         if (locationParam || keywordParam) {
           apiUrl += `?location=${locationParam || ''}&keyword=${keywordParam || ''}`;

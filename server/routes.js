@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const { userModel } = require("./models/userschema");
@@ -205,40 +206,38 @@ router.get("/ratings", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-// post req for adding rating
-router.post("/ratings", async (req, res) => {
+// put req for adding rating
+router.put("/ratings", async (req, res) => {
   try {
     const { email, ratedBy, rating } = req.body;
-
-    
-    const existingRating = await ratingModel.findOne({ email });
-    if (existingRating) {
-      const alreadyRated = existingRating.ratings.find(r => r.ratedBy === ratedBy);
-      if (alreadyRated) {
-        
-        alreadyRated.rating = rating;
-        await existingRating.save();
-        return res.status(200).send("Rating updated successfully");
-      }
-      
-      existingRating.ratings.push({ ratedBy, rating });
-      await existingRating.save();
-      return res.status(201).send("Rating added successfully");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.send(errors.array());
     }
 
-    
-    const newRating = new ratingModel({
-      email,
-      ratings: [{ ratedBy, rating }]
-    });
-    await newRating.save();
+    let existingRating = await ratingModel.findOne({ email });
+    if (!existingRating) {
+      existingRating = new ratingModel({
+        email,
+        ratings: [],
+      });
+    }
 
-    res.status(201).send("Rating saved successfully");
+    const alreadyRatedIndex = existingRating.ratings.findIndex((r) => r.ratedBy === ratedBy);
+
+    if (alreadyRatedIndex !== -1) {
+      existingRating.ratings[alreadyRatedIndex].rating = rating;
+    } else {
+      existingRating.ratings.push({ ratedBy, rating });
+    }
+    await existingRating.save();
+    res.status(200).send("Rating saved successfully");
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // get req for fetching rating by email
 

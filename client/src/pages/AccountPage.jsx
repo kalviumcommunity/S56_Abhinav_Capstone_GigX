@@ -11,7 +11,7 @@ import AccountInput from "../components/AccountInput";
 
 const AccountPage = () => {
 
-  const userAPI="http://localhost:3000/users";
+  const userAPI="https://gigx.onrender.com/users";
 
   const [userData, setUserData] = useState({
     name: "",

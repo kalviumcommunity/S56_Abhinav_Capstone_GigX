@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const ratingSchema = mongoose.Schema({
-    email:{type:String, unique:true},
+    email:{type:String, required:true},
     ratings:[{
         ratedBy:String,
         rating:Number

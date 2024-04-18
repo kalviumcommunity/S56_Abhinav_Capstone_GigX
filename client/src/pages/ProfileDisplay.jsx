@@ -18,7 +18,7 @@ const ProfileDisplay = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/users/${email}`);
+        const response = await axios.get(`https://gigx.onrender.com/users/${email}`);
         setUser(response.data);
         setLoading(false);
       } catch (error) {
@@ -33,7 +33,7 @@ const ProfileDisplay = () => {
   useEffect(() => {
     const fetchRating = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/ratings/${email}`);
+        const response = await axios.get(`https://gigx.onrender.com/ratings/${email}`);
         if (response.data) {
           setUserRating(response.data.rating);
           setAvgRating(response.data.avgRating);
@@ -58,7 +58,7 @@ const ProfileDisplay = () => {
   
     setUserRating(star);
     try {
-      await axios.post("http://localhost:3000/ratings", {
+      await axios.put("https://gigx.onrender.com/ratings", {
         email: user.email,
         ratedBy: Cookies.get("email"), 
         rating: star,

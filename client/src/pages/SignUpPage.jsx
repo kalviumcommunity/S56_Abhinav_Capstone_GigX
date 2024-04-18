@@ -32,7 +32,7 @@ const SignUpPage = () => {
     event.preventDefault();
     try {
 
-      const  response= await axios.post('http://localhost:3000/signup', formData);
+      const  response= await axios.post('https://gigx.onrender.com/signup', formData);
       const { token,email } = response.data;
 
       Cookies.set('token', token); 
