@@ -104,6 +104,7 @@ const LandingPage = () => {
         <div className="workingimg flex">
           <img src={working} alt="" />
         </div>
+        
       </div>
       <Footer />
     </div>

@@ -72,13 +72,26 @@ const AccountPage = () => {
   };
 
   const handleChange = (fieldName, newValue) => {
-    const trimmedSkills = newValue.split(",").map(skill => skill.trim());
+    console.log(fieldName, newValue);
+    let updatedValue = newValue;
+    
+    
+    if (Array.isArray(newValue)) {
+      updatedValue = newValue;
+    } else if (typeof newValue === 'string') {
+    
+      updatedValue = newValue.trim();
+    } else {
+      console.error("Invalid data type for newValue");
+      return;
+    }
     
     setUserData((prevUserData) => ({
       ...prevUserData,
-      [fieldName]: trimmedSkills,
+      [fieldName]: updatedValue,
     }));
   };
+  
   
 
   return (

@@ -11,18 +11,13 @@ import Cookies from "js-cookie";
 const Nav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const userCookie = Cookies.get("token");
     setIsLoggedIn(!!userCookie); 
   }, []);
-
-  useEffect(() => {
-    if (selectedLocation) {
-      navigate(`/freelancers?location=${selectedLocation}`);
-    }
-  }, [selectedLocation]);
 
   const handleLogout = () => {
     Cookies.remove("token"); 
@@ -33,17 +28,30 @@ const Nav = () => {
 
   const handleLocationChange = (e) => {
     const locationValue = e.target.value;
-    console.log("Selected Location:", locationValue);
     setSelectedLocation(locationValue);
+    if (locationValue) {
+      navigate(`/freelancers?location=${locationValue}`);
+    }
+  };
+
+  const handleSearch = () => {
+    if (searchKeyword) {
+      navigate(`/search?keyword=${searchKeyword}`);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    const keyword = e.target.value;
+    setSearchKeyword(keyword);
   };
 
   return (
     <div>
       <nav className="topnav flex">
         <div className="routes flex">
-          <Link to={"/"}> <p>Home</p></Link>
-          <Link to={"/companies"} > <p>Companies</p></Link>
-          <Link to={"/freelancers"}> <p>Freelancers</p></Link>
+          <Link to={"/"}><p>Home</p></Link>
+          <Link to={"/companies"}><p>Companies</p></Link>
+          <Link to={"/freelancers"}><p>Freelancers</p></Link>
           <Link to={"/aboutus"}><p>About Us</p></Link>
         </div>
 
@@ -59,7 +67,8 @@ const Nav = () => {
       <div className="bottomnav flex">
         <div className="left flex">
           <Link to={"/"}>
-          <img src={logo} alt="logo" /></Link>
+            <img src={logo} alt="logo" />
+          </Link>
           <select value={selectedLocation} onChange={handleLocationChange}>
             <option value="" disabled >Select Location</option>
             <option value="Delhi">Delhi</option>
@@ -80,8 +89,10 @@ const Nav = () => {
             label="Search Here"
             variant="standard"
             className="search"
+            value={searchKeyword}
+            onChange={handleSearchChange}
           />
-          <FaSearch className="searchicon" />
+          <FaSearch className="searchicon" onClick={handleSearch} />
         </div>
         <div className="right flex">
           {isLoggedIn ? (
