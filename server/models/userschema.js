@@ -11,7 +11,8 @@ const userSchema = mongoose.Schema({
     skills: [String],
     location: String,
     country: String,
-    experience: String
+    experience: String,
+    profilePic: String,
 }, { versionKey: false });
 
 const userModel = mongoose.model("user-colls", userSchema);

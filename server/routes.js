@@ -10,6 +10,8 @@ const {
   userValidationSchema,
   contactValidationSchema,
 } = require("./validator");
+const upload = require("./utils/multer");
+const cloudinary = require("./utils/cloudinary");
 require("dotenv").config();
 const jwtSecret = process.env.secretKey;
 
@@ -143,6 +145,7 @@ router.put("/users/:email", async (req, res) => {
       location,
       country,
       experience,
+      profilePic, // Add profilePic field
     } = req.body;
 
     const updatedFields = {
@@ -155,6 +158,7 @@ router.put("/users/:email", async (req, res) => {
       location,
       country,
       experience,
+      profilePic, // Include profilePic in the updated fields
     };
 
     const user = await userModel.findOneAndUpdate(
@@ -173,6 +177,7 @@ router.put("/users/:email", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // deleting user by email
 router.delete("/users/:email", async (req, res) => {
@@ -297,5 +302,25 @@ router.get("/ratings/:email", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+// post req to upload image
+router.post('/upload', upload.single('image'), function (req, res) {
+  cloudinary.uploader.upload(req.file.path, function (err, result){
+    if(err) {
+      console.log(err);
+      return res.status(500).json({
+        success: false,
+        message: "Error"
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message:"Uploaded!",
+      data: result
+    })
+  })
+});
+
 
 module.exports = router;

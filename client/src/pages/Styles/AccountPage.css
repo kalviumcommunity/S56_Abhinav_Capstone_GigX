@@ -32,16 +32,26 @@
   }
   
   .accountpageright {
-    flex: 1;
-    display: flex;
-    justify-content: center;
+    width: 40%;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
   }
   
   .accountpageright img {
     max-width: 100%;
     border-radius: 50%;
   }
-  
+  .accountpageright input{
+    width: 40%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding-left: 55px;
+    outline: none;
+    /* margin-top: 30px; */
+  }
+
   .deleteBox {
     text-align: center;
     margin-top: 20px;
