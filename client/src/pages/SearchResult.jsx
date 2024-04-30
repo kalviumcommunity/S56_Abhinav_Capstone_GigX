@@ -12,7 +12,7 @@ const SearchResult = ({ location }) => {
     const fetchSearchResults = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/search?keyword=${keyword}`
+          `https://gigx.onrender.com/search?keyword=${keyword}`
         );
         setSearchResults(response.data);
         console.log("Search results:", response.data);

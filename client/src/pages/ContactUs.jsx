@@ -24,7 +24,7 @@ const ContactUs = () => {
     e.preventDefault();
     try {
       
-      await axios.post('http://localhost:3000/contact', formData);
+      await axios.post('https://gigx.onrender.com/contact', formData);
       console.log('Form data submitted successfully');
       
       setFormData({
