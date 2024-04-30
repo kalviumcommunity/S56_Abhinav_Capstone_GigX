@@ -1,4 +1,3 @@
-const { validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const { userModel } = require("./models/userschema");
@@ -145,7 +144,7 @@ router.put("/users/:email", async (req, res) => {
       location,
       country,
       experience,
-      profilePic, // Add profilePic field
+      profilePic, 
     } = req.body;
 
     const updatedFields = {
@@ -158,7 +157,7 @@ router.put("/users/:email", async (req, res) => {
       location,
       country,
       experience,
-      profilePic, // Include profilePic in the updated fields
+      profilePic, 
     };
 
     const user = await userModel.findOneAndUpdate(
@@ -307,20 +306,21 @@ router.get("/ratings/:email", async (req, res) => {
 router.post('/upload', upload.single('image'), function (req, res) {
   cloudinary.uploader.upload(req.file.path, function (err, result){
     if(err) {
-      console.log(err);
+      console.log('Image cannot be uploaed:', err);
       return res.status(500).json({
         success: false,
-        message: "Error"
-      })
+        message: "Error uploading image"
+      });
     }
 
     res.status(200).json({
       success: true,
-      message:"Uploaded!",
+      message: "Uploaded!",
       data: result
-    })
-  })
+    });
+  });
 });
+
 
 
 module.exports = router;

@@ -11,7 +11,7 @@
 
   const AccountPage = () => {
 
-    const userAPI="https://gigx.onrender.com/users";
+    const userAPI="http://localhost:3000/users";
 
     const [userData, setUserData] = useState({
       name: "",
@@ -27,7 +27,6 @@
     });
     const [editMode, setEditMode] = useState(false);
     const [freelancer, setFreelancer] = useState(false);
-    // const [profilePic, setprofilePic] = useState(null);
     const navigate = useNavigate();
     
 
@@ -108,7 +107,7 @@
         const formData = new FormData();
         formData.append("image", file);
     
-        const response = await axios.post("https://gigx.onrender.com/upload", formData, {
+        const response = await axios.post("http://localhost:3000/upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
