@@ -11,7 +11,8 @@ const userValidationSchema = Joi.object({
     skills: Joi.array().items(Joi.string()),
     location: Joi.string(),
     country: Joi.string(),
-    experience: Joi.string()
+    experience: Joi.string(),
+    profilePic: Joi.string(),
 });
 
 // contact us validation

@@ -18,7 +18,7 @@ const ProfileDisplay = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/users/${email}`);
+        const response = await axios.get(`${API}/users/${email}`);
         setUser(response.data);
         setLoading(false);
       } catch (error) {
@@ -33,7 +33,7 @@ const ProfileDisplay = () => {
   useEffect(() => {
     const fetchRating = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/ratings/${email}`);
+        const response = await axios.get(`${API}/ratings/${email}`);
         if (response.data) {
           setUserRating(response.data.rating);
           setAvgRating(response.data.avgRating);
@@ -58,7 +58,7 @@ const ProfileDisplay = () => {
   
     setUserRating(star);
     try {
-      await axios.put("http://localhost:3000/ratings", {
+      await axios.put(`${API}/ratings`, {
         email: user.email,
         ratedBy: Cookies.get("email"), 
         rating: star,
@@ -85,7 +85,7 @@ const ProfileDisplay = () => {
         <div className="profile-container">
           <h1>{user.name.charAt(0).toUpperCase() + user.name.slice(1)}</h1>
           <h3>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</h3>
-          <img src={pf1} alt="" />
+          <img src={user.profilePic || pf1} alt="" />
           <div className="avg-rating">
   {[...Array(5)].map((_, index) => (
     <span key={index}>

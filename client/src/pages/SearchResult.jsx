@@ -12,7 +12,7 @@ const SearchResult = ({ location }) => {
     const fetchSearchResults = async () => {
       try {
         const response = await axios.get(
-          `https://gigx.onrender.com/search?keyword=${keyword}`
+          `${API}/search?keyword=${keyword}`
         );
         setSearchResults(response.data);
         console.log("Search results:", response.data);
@@ -37,7 +37,7 @@ const SearchResult = ({ location }) => {
           {searchResults.map((user) => (
             <div key={user._id} className="profile-info">
               <img
-                src={pf1}
+                src={user.profilePic || pf1}
                 alt={user.name}
                 className="profile-pic"
                 width={"50px"}

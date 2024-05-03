@@ -53,3 +53,9 @@
 .copyright{
     text-align: center;
 }
+
+.footer-container{
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}

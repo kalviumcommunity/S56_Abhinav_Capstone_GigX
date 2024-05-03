@@ -18,30 +18,15 @@ const LandingPage = () => {
   const [keyword, setKeyword] = useState('');
   const navigate = useNavigate(); 
 
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return function (...args) {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delay);
-    };
-  };
-
-  const debouncedNavigation = debounce(() => {
-    navigate(`/freelancers?location=${location}&keyword=${keyword}`); 
-  }, 10000); 
-
   const handleLocationChange = (e) => {
     setLocation(e.target.value);
-    debouncedNavigation();
   };
 
   const handleKeywordChange = (e) => {
     setKeyword(e.target.value);
-    debouncedNavigation();
   };
 
   const handleFindFreelancer = () => {
-    
     navigate(`/freelancers?location=${location}&keyword=${keyword}`); 
   };
 
@@ -58,8 +43,8 @@ const LandingPage = () => {
 
           <div className="search-bar flex">
             <div className="location flex">
-            <img src="https://imgs.search.brave.com/TB7upLkgMhk62eK2ryUcaeBdp0BjJT2pxyjxcd5QXII/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMtMDAuaWNvbmR1/Y2suY29tL2Fzc2V0/cy4wMC9sb2NhdGlv/bi1pY29uLTIwNHgy/NTYteG01M25uazgu/cG5n" alt="" height={20} />
-            <input type="text" placeholder="Location" value={location} onChange={handleLocationChange} />
+              <img src="https://imgs.search.brave.com/TB7upLkgMhk62eK2ryUcaeBdp0BjJT2pxyjxcd5QXII/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMtMDAuaWNvbmR1/Y2suY29tL2Fzc2V0/cy4wMC9sb2NhdGlv/bi1pY29uLTIwNHgy/NTYteG01M25uazgu/cG5n" alt="" height={20} />
+              <input type="text" placeholder="Location" value={location} onChange={handleLocationChange} />
             </div>
             <div className="keyword flex">
               <FaSearch />
