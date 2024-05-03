@@ -29,7 +29,7 @@ const LoginPage = () => {
 
         
 
-            const response = await axios.post('https://gigx.onrender.com/login', formData);
+            const response = await axios.post(`${API}/login`, formData);
 
             const { token,email } = response.data;
     

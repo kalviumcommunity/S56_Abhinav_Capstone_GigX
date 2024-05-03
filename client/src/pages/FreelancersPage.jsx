@@ -3,6 +3,7 @@ import axios from 'axios';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { Link, useLocation } from 'react-router-dom';
+import pf1 from '../assets/Profiles/pf1.png';
 
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -36,7 +37,7 @@ const FreelancersPage = () => {
         const locationParam = queryParams.get('location');
         const keywordParam = queryParams.get('keyword');
 
-        let apiUrl = 'https://gigx.onrender.com/users';
+        let apiUrl = `${API}/users`;
 
         if (locationParam || keywordParam) {
           apiUrl += `?location=${locationParam || ''}&keyword=${keywordParam || ''}`;
@@ -80,7 +81,7 @@ const FreelancersPage = () => {
                 <div key={user._id} className="card">
                   <h2 className="cardHeading">{user.name}</h2>
                   <div className="pic">
-                    <img src="https://imgs.search.brave.com/otk_6KZbTk6hvwBXghj7t7PF4hklKOQkYgWpx3oIfAo/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jZG4t/aWNvbnMtcG5nLmZy/ZWVwaWsuY29tLzI1/Ni8xMTE5NS8xMTE5/NTEwOC5wbmc" height={"50px"} alt="" />
+                    <img src={user.profilePic || pf1 } height={"50px"} alt="" />
                   </div>
                   <div className="cardContent">
                     <p className="cardText">{user.company}</p>
