@@ -8,6 +8,7 @@
   import Cookies from "js-cookie";
   import { useNavigate } from "react-router-dom";
   import AccountInput from "../components/AccountInput";
+  import { Link } from "react-router-dom";
 
   const AccountPage = () => {
 
@@ -224,13 +225,19 @@
                 />
               </>
             )}
-
+        
             <h1>Active Projects</h1>
             <div>
               <h3>Project Name</h3>
               <h3>Project Name</h3>
               <h3>Project Name</h3>
             </div>
+                {!freelancer &&(
+              <>
+              <br />
+           <Link to={"/postproject"} > <Button variant="outlined"> Post a new Project</Button></Link>
+              </>
+            )}
           </div>
           <div className="accountpageright flex">
   <img src={userData.profilePic || pf1} alt="profilePic" />

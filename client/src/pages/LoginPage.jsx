@@ -7,6 +7,7 @@ import loginimg from "../assets/loginimg.png";
 import './Styles/LoginPage.css';
 import Cookies from 'js-cookie';
 
+
 const LoginPage = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({

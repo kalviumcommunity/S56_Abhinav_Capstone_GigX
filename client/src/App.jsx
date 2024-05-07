@@ -11,6 +11,7 @@ import ProfileDisplay from "./pages/ProfileDisplay"
 import AboutUsPage from "./pages/AboutUsPage"
 import ContactUs from "./pages/ContactUs"
 import SearchResult from "./pages/SearchResult"
+import ProjectPostPage from "./pages/ProjectPostPage"
 
 function App() {
 
@@ -28,6 +29,8 @@ function App() {
         <Route path="/aboutus" element={<AboutUsPage />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/search" element={<SearchResult location={location} />} />
+        <Route path="/postproject" element={<ProjectPostPage />} />
+
 
 
       </Routes>
