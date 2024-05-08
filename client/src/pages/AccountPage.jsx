@@ -10,6 +10,7 @@ import AccountInput from "../components/AccountInput";
 import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../components/Loader";
 
 const AccountPage = () => {
   const userAPI = `${API}/users`;
