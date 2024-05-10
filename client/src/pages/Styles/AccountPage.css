@@ -34,8 +34,6 @@
   .accountpageright {
     width: 40%;
     flex-direction: column;
-    /* justify-content: center; */
-    /* align-items: center; */
   }
   
   .accountpageright img {
@@ -49,7 +47,7 @@
     border-radius: 5px;
     padding-left: 55px;
     outline: none;
-    /* margin-top: 30px; */
+    
   }
 
   .deleteBox {
@@ -87,5 +85,6 @@
   }
   
 
-  
-  
+  .project-details{
+    text-align: center;
+  }

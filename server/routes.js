@@ -3,6 +3,8 @@ const router = express.Router();
 const { userModel } = require("./models/userschema");
 const { contactModel } = require("./models/contactschema");
 const { ratingModel } = require("./models/ratingschema");
+const { projectModel } = require("./models/projectschema");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const {
@@ -320,7 +322,64 @@ router.post('/upload', upload.single('image'), function (req, res) {
     });
   });
 });
+// get req for fetching all the projects
+router.get("/projects", async (req, res) => {
+  try {
+    const projects = await projectModel.find();
+    res.status(200).send(projects);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
+// post req for posting a project
+router.post("/projects", async (req, res) => {
+  try {
+    const {
+      user,
+      projectName,
+      endDate,
+      skillsRequired,
+      referenceDocument,
+      budget,
+      description,
+    } = req.body;
 
+    const newProject = new projectModel({
+      user,
+      projectName,
+      endDate,
+      skillsRequired,
+      referenceDocument,
+      budget,
+      description,
+    });
+
+    await newProject.save();
+
+    res.status(201).send("Project posted successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// get req for fetching project by user id
+router.get("/projects/:user", async (req, res) => {
+  try {
+    const { user } = req.params;
+    const projects = await projectModel.find({ user });
+
+    if (!projects) {
+      return res.status(404).send("Projects not found");
+    }
+
+    res.status(200).send(projects);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 module.exports = router;

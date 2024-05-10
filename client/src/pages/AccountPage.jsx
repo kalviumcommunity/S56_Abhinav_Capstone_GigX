@@ -10,7 +10,6 @@ import AccountInput from "../components/AccountInput";
 import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from "../components/Loader";
 
 const AccountPage = () => {
   const userAPI = `${API}/users`;
@@ -29,22 +28,29 @@ const AccountPage = () => {
   });
   const [editMode, setEditMode] = useState(false);
   const [freelancer, setFreelancer] = useState(false);
+  const [user,setUser] = useState(null);
+  const [projects, setProjects] = useState([]); 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
         const userEmail = Cookies.get("email");
-        const response = await axios.get(`${userAPI}/${userEmail}`);
-        const fetchedData = response.data;
-        setUserData(fetchedData);
-        setFreelancer(fetchedData.freelancer);
+        const userDataResponse = await axios.get(`${userAPI}/${userEmail}`);
+        const fetchedUserData = userDataResponse.data;
+        setUserData(fetchedUserData);
+        setFreelancer(fetchedUserData.freelancer);
+        setUser(fetchedUserData._id);
+  
+        const projectsResponse = await axios.get(`${API}/projects/${fetchedUserData._id}`);
+        setProjects(projectsResponse.data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    fetchUserData();
+    fetchData();
   }, []);
+  
 
   const handleSave = async () => {
     try {
@@ -202,11 +208,19 @@ const AccountPage = () => {
           )}
 
           <h1>Active Projects</h1>
-          <div>
-            <h3>Project Name</h3>
-            <h3>Project Name</h3>
-            <h3>Project Name</h3>
-          </div>
+          
+          <div className="projects-grid">
+            
+  {projects.map((project, index) => (
+    <div key={index} className="project-details flex">
+      <h3> {project.projectName}</h3>
+      <p>{new Date(project.endDate).toLocaleDateString()}</p>
+      
+    </div>
+  ))}
+</div>
+
+
           {!freelancer && (
             <>
               <br />
