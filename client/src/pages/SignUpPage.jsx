@@ -20,7 +20,6 @@ const SignUpPage = () => {
     password: '',
     freelancer: false 
   });
-  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -38,20 +37,28 @@ const SignUpPage = () => {
       const { token, email } = response.data;
       Cookies.set('token', token); 
       Cookies.set('email', email);
-      navigate('/');
-      toast.success('Sign up successful!',{
+      toast.success('Sign up successful!', {
         autoClose: 1000,
         onClose: () => navigate('/'),
-      
       });
     } catch (error) {
       console.error('Error signing up:', error);
-      if (error.response && error.response.status === 400) {
-        setErrorMessage('Email already exists');
-        toast.error('Email already exists');
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            toast.error('Email already exists');
+            break;
+          case 422:
+            toast.error('Invalid input. Please check your data.');
+            break;
+          case 500:
+            toast.error('Server error. Please try again later.');
+            break;
+          default:
+            toast.error('An unexpected error occurred. Please try again.');
+        }
       } else {
-        console.error('Unexpected error:', error);
-        toast.error('An unexpected error occurred. Please try again later.');
+        toast.error('Network error. Please check your connection.');
       }
     }
   };
@@ -80,7 +87,6 @@ const SignUpPage = () => {
                 </div>
               </div>
               <button type="submit" className='signupbtn'>Sign Up</button>
-              {errorMessage && <p style={{ color: 'red', textAlign:"center" }}>{errorMessage}</p>}
               <p className='center'>Or</p>
               <div className="google pointer">
                 <img src={google} alt="" />

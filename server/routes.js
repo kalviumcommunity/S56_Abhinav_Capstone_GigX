@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const {
   userValidationSchema,
   contactValidationSchema,
+  projectValidationSchema,
 } = require("./validator");
 const upload = require("./utils/multer");
 const cloudinary = require("./utils/cloudinary");
@@ -322,63 +323,72 @@ router.post('/upload', upload.single('image'), function (req, res) {
     });
   });
 });
-// get req for fetching all the projects
+
+const validateProjectData = (req, res, next) => {
+  const { error, value } = projectValidationSchema.validate(req.body);
+  if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+  }
+  next();
+};
+
+// get request to fetch all projects
 router.get("/projects", async (req, res) => {
   try {
-    const projects = await projectModel.find();
-    res.status(200).send(projects);
+      const projects = await projectModel.find();
+      res.status(200).send(projects);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
+      console.error(err);
+      res.status(500).send("Internal Server Error");
   }
 });
 
-// post req for posting a project
-router.post("/projects", async (req, res) => {
+// post request to post a new project
+router.post("/projects", validateProjectData, async (req, res) => {
   try {
-    const {
-      user,
-      projectName,
-      endDate,
-      skillsRequired,
-      referenceDocument,
-      budget,
-      description,
-    } = req.body;
+      const {
+          user,
+          projectName,
+          endDate,
+          skillsRequired,
+          referenceDocument,
+          budget,
+          description,
+      } = req.body;
 
-    const newProject = new projectModel({
-      user,
-      projectName,
-      endDate,
-      skillsRequired,
-      referenceDocument,
-      budget,
-      description,
-    });
+      const newProject = new projectModel({
+          user,
+          projectName,
+          endDate,
+          skillsRequired,
+          referenceDocument,
+          budget,
+          description,
+      });
 
-    await newProject.save();
+      await newProject.save();
 
-    res.status(201).send("Project posted successfully");
+      res.status(201).send("Project posted successfully");
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
+      console.error(err);
+      res.status(500).send("Internal Server Error");
   }
 });
 
-// get req for fetching project by user id
+// get request to fetch projects by user ID
 router.get("/projects/:user", async (req, res) => {
   try {
-    const { user } = req.params;
-    const projects = await projectModel.find({ user });
+      const { user } = req.params;
+      const projects = await projectModel.find({ user });
 
-    if (!projects) {
-      return res.status(404).send("Projects not found");
-    }
+      if (projects.length === 0) {
+          return res.status(404).send("Projects not found");
+      }
 
-    res.status(200).send(projects);
+      res.status(200).send(projects);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
+      console.error(err);
+      res.status(500).send("Internal Server Error");
   }
 });
 
