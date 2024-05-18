@@ -23,7 +23,20 @@ const contactValidationSchema = Joi.object({
     message: Joi.string().required()
 });
 
+// projects validation
+const projectValidationSchema = Joi.object({
+    user: Joi.string().required(),
+    projectName: Joi.string().required(),
+    endDate: Joi.date().iso().required(),
+    skillsRequired: Joi.string().required(),
+    referenceDocument: Joi.string(),
+    budget: Joi.number().required(),
+    description: Joi.string().required(),
+    assignedTo: Joi.string().allow(null)
+});
+
 module.exports = {
     userValidationSchema,
-    contactValidationSchema
+    contactValidationSchema,
+    projectValidationSchema
 };

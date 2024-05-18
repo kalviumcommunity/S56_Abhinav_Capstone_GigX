@@ -6,6 +6,8 @@ import google from "../assets/google.png";
 import loginimg from "../assets/loginimg.png";
 import './Styles/LoginPage.css';
 import Cookies from 'js-cookie';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -26,35 +28,33 @@ const LoginPage = () => {
     const handleSignInSubmit = async (event) => {
         event.preventDefault();
         try {
-
-        
-
             const response = await axios.post(`${API}/login`, formData);
-
-            const { token,email } = response.data;
-    
-            console.log(response);
+            const { token, email } = response.data;
             Cookies.set('token', token); 
             Cookies.set('email', email);
-            navigate('/');
+            toast.success('Login successful!', {
+                autoClose: 1000,
+                onClose: () => navigate('/')
+            });
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 setErrorMessage('Invalid email or password');
+                toast.error('Invalid email or password');
             } else {
                 setErrorMessage('An error occurred. Please try again later.');
+                toast.error('An error occurred. Please try again later.');
             }
         }
     };
+    
 
     return (
         <div>
+            <ToastContainer />
             <div className="container">
                 <Link to="/" className="close-icon">
                     <FaTimes />
                 </Link>
-
-                
-
                 <form onSubmit={handleSignInSubmit}>
                     <div className="flex-container flex">
                         <div className="box-left">
@@ -67,7 +67,6 @@ const LoginPage = () => {
                             <button type="submit" className='signinbtn'>Sign In</button>
                             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                             <p className='forgot pointer'>Forgot Password?</p>
-
                             <p className='center'>Or</p>
                             <div className="google pointer">
                                 <img src={google} alt="" />
@@ -79,7 +78,6 @@ const LoginPage = () => {
                         </div>
                     </div>
                 </form>
-
                 <p className='center'>
                     Don&apos;t have an account? <Link to={"/signup"}> <span className='pointer signup'>Sign Up</span></Link>
                 </p>

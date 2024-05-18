@@ -6,6 +6,9 @@ import loginimg from "../assets/loginimg.png";
 import google from "../assets/google.png";
 import './Styles/SignUp.css';
 import Cookies from 'js-cookie';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const SignUpPage = () => {
   const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
@@ -17,7 +20,6 @@ const SignUpPage = () => {
     password: '',
     freelancer: false 
   });
-  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -31,31 +33,43 @@ const SignUpPage = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
     try {
-
-      const  response= await axios.post(`${API}/signup`, formData);
-      const { token,email } = response.data;
-
+      const response = await axios.post(`${API}/signup`, formData);
+      const { token, email } = response.data;
       Cookies.set('token', token); 
-            Cookies.set('email', email);
-      navigate('/');
+      Cookies.set('email', email);
+      toast.success('Sign up successful!', {
+        autoClose: 1000,
+        onClose: () => navigate('/'),
+      });
     } catch (error) {
       console.error('Error signing up:', error);
-      if (error.response && error.response.status === 400) {
-        setErrorMessage('Email already exists');
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            toast.error('Email already exists');
+            break;
+          case 422:
+            toast.error('Invalid input. Please check your data.');
+            break;
+          case 500:
+            toast.error('Server error. Please try again later.');
+            break;
+          default:
+            toast.error('An unexpected error occurred. Please try again.');
+        }
       } else {
-        console.error('Unexpected error:', error);
+        toast.error('Network error. Please check your connection.');
       }
     }
   };
 
   return (
     <div>
+      <ToastContainer />
       <div className="signup-container">
         <Link to="/" className="close-icon">
           <FaTimes />
         </Link>
-        
-
         <form onSubmit={handleSignUp}>
           <div className="container-main flex">
             <div className="left-section">
@@ -73,8 +87,6 @@ const SignUpPage = () => {
                 </div>
               </div>
               <button type="submit" className='signupbtn'>Sign Up</button>
-              {errorMessage && <p style={{ color: 'red', textAlign:"center" }}>{errorMessage}</p>}
-
               <p className='center'>Or</p>
               <div className="google pointer">
                 <img src={google} alt="" />
@@ -86,7 +98,6 @@ const SignUpPage = () => {
             </div>
           </div>
         </form>
-
         <p className='center'>
           Already have an account? <Link to={"/login"}><span className='pointer loginbtn'>Login</span></Link>
         </p>

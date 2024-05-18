@@ -3,11 +3,14 @@ const router = express.Router();
 const { userModel } = require("./models/userschema");
 const { contactModel } = require("./models/contactschema");
 const { ratingModel } = require("./models/ratingschema");
+const { projectModel } = require("./models/projectschema");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const {
   userValidationSchema,
   contactValidationSchema,
+  projectValidationSchema,
 } = require("./validator");
 const upload = require("./utils/multer");
 const cloudinary = require("./utils/cloudinary");
@@ -321,6 +324,72 @@ router.post('/upload', upload.single('image'), function (req, res) {
   });
 });
 
+const validateProjectData = (req, res, next) => {
+  const { error, value } = projectValidationSchema.validate(req.body);
+  if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+  }
+  next();
+};
 
+// get request to fetch all projects
+router.get("/projects", async (req, res) => {
+  try {
+      const projects = await projectModel.find();
+      res.status(200).send(projects);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+// post request to post a new project
+router.post("/projects", validateProjectData, async (req, res) => {
+  try {
+      const {
+          user,
+          projectName,
+          endDate,
+          skillsRequired,
+          referenceDocument,
+          budget,
+          description,
+      } = req.body;
+
+      const newProject = new projectModel({
+          user,
+          projectName,
+          endDate,
+          skillsRequired,
+          referenceDocument,
+          budget,
+          description,
+      });
+
+      await newProject.save();
+
+      res.status(201).send("Project posted successfully");
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+// get request to fetch projects by user ID
+router.get("/projects/:user", async (req, res) => {
+  try {
+      const { user } = req.params;
+      const projects = await projectModel.find({ user });
+
+      if (projects.length === 0) {
+          return res.status(404).send("Projects not found");
+      }
+
+      res.status(200).send(projects);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+  }
+});
 
 module.exports = router;

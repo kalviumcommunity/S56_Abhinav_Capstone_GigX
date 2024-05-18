@@ -4,22 +4,7 @@ import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { Link, useLocation } from 'react-router-dom';
 import pf1 from '../assets/Profiles/pf1.png';
-
-const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-};
+import Loader from '../components/Loader'; 
 
 const FreelancersPage = () => {
   const [users, setUsers] = useState([]);
@@ -28,7 +13,6 @@ const FreelancersPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchInput, setSearchInput] = useState('');
-  const debouncedSearchInput = useDebounce(searchInput, 500);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -58,7 +42,7 @@ const FreelancersPage = () => {
     };
 
     fetchUsers();
-  }, [location, selectedLocation, debouncedSearchInput]);
+  }, [location, selectedLocation]);
 
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
@@ -69,7 +53,7 @@ const FreelancersPage = () => {
       <Nav setSelectedLocation={setSelectedLocation} handleSearchInputChange={handleSearchInputChange} />
       <div className="companyPage">
         {isLoading ? (
-          <p>Loading...</p>
+          <Loader type="bubbles" color="#000" /> 
         ) : error ? (
           <p>{error}</p>
         ) : users.length === 0 ? (
