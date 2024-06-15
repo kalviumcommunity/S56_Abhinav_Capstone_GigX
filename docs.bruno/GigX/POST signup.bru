@@ -1,0 +1,29 @@
+meta {
+  name: POST signup
+  type: http
+  seq: 8
+}
+
+post {
+  url: https://gigx.onrender.com/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "1234567890",
+    "role": "Developer",
+    "company": "Tech Solutions Inc.",
+    "password": "SecurePassword123!",
+    "freelancer": true,
+    "skills": ["JavaScript", "Node.js", "MongoDB"],
+    "location": "New York",
+    "country": "USA",
+    "experience": "5 years",
+    "profilePic": "https://example.com/profile-pic.jpg"
+  }
+  
+}

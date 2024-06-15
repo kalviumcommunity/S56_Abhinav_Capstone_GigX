@@ -1,0 +1,15 @@
+meta {
+  name: POST file
+  type: http
+  seq: 10
+}
+
+post {
+  url: https://gigx.onrender.com/upload
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  image: @file(C:\Users\ABHINAV\Downloads\mitadtLOGO2.png)
+}

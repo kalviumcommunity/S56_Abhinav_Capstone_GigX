@@ -1,0 +1,21 @@
+meta {
+  name: POST contact
+  type: http
+  seq: 9
+}
+
+post {
+  url: https://gigx.onrender.com/contact
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "phone": "5551234567",
+    "message": "I am interested in your services and would like to know more."
+  }
+  
+}

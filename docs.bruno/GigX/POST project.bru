@@ -1,0 +1,24 @@
+meta {
+  name: POST project
+  type: http
+  seq: 11
+}
+
+post {
+  url: https://gigx.onrender.com/projects
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user": "60d0fe4f5311236168a109ca",
+    "projectName": "New Website Development",
+    "endDate": "2024-12-31T00:00:00.000Z",
+    "skillsRequired": "html,css,js",
+    "referenceDocument": "https://example.com/reference-doc.pdf",
+    "budget": 5000,
+    "description": "Develop a new company website with responsive design and modern features."
+  }
+  
+}
