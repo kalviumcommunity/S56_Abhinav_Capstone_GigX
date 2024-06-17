@@ -245,6 +245,13 @@ const AccountPage = () => {
           )}
         </div>
       </div>
+      <div className="changepw">
+        <Link to="/resetpassword">
+          <Button variant="outlined" className="changePassword">
+            Change Password
+          </Button>
+        </Link>
+      </div>
       <div className="deleteBox">
         <h1>Do you want to delete your account?</h1>
         <Button

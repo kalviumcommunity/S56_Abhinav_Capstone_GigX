@@ -66,7 +66,7 @@ const LoginPage = () => {
                             </div>
                             <button type="submit" className='signinbtn'>Sign In</button>
                             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                            <p className='forgot pointer'>Forgot Password?</p>
+                            <Link to={"/resetpassword"}> <p className='forgot pointer'>Forgot Password?</p></Link>
                             <p className='center'>Or</p>
                             <div className="google pointer">
                                 <img src={google} alt="" />

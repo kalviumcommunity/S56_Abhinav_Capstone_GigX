@@ -12,6 +12,7 @@ import AboutUsPage from "./pages/AboutUsPage"
 import ContactUs from "./pages/ContactUs"
 import SearchResult from "./pages/SearchResult"
 import ProjectPostPage from "./pages/ProjectPostPage"
+import ResetPassword from "./pages/ResetPassword"
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/search" element={<SearchResult location={location} />} />
         <Route path="/postproject" element={<ProjectPostPage />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
 
 
 

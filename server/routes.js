@@ -405,6 +405,7 @@ const transporter = nodemailer.createTransport({
       pass: process.env.PASSWORD
   }
 });
+
 // forget password by otp in email
 router.post("/forgetpassword", async (req, res) => {
   try {
@@ -416,10 +417,16 @@ router.post("/forgetpassword", async (req, res) => {
     } else {
       const random = Math.floor(100000 + Math.random() * 900000);
       const otp = String(random).padStart(6, "0");
+      const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); 
+
+      user.otp = otp;
+      user.otpExpiration = otpExpiration;
+      await user.save();
+
       let mailoptions = {
         from: {
           name: "GigX",
-          address: "contactgigx@gmail.com",
+          address: process.env.EMAIL,
         },
         to: email,
         subject: "OTP for password reset",
@@ -439,11 +446,39 @@ The GigX Team`,
       transporter.sendMail(mailoptions, function (err, data) {
         if (err) {
           console.log("Error Occurs", err);
+          res.status(500).send("Error sending email");
         } else {
           console.log("Email sent");
           res.send("Email sent");
         }
       });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+// reset password
+router.put("/resetpassword", async (req, res) => {
+  try {
+    const { email, otp, password } = req.body;
+
+    const user = await userModel.findOne({ email: email });
+    if (!user) {
+      return res.status(404).send("User not found");
+    } else {
+      if (user.otp === otp && user.otpExpiration > new Date()) {
+        const hash = await bcrypt.hash(password, 5);
+        user.password = hash;
+        user.otp = "";
+        user.otpExpiration = null;
+        await user.save();
+        res.send("Password reset successfully");
+      } else {
+        res.send("Invalid OTP or OTP expired");
+      }
     }
   } catch (err) {
     console.error(err);
