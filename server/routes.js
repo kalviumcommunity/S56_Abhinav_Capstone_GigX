@@ -15,6 +15,7 @@ const {
 } = require("./validator");
 const upload = require("./utils/multer");
 const cloudinary = require("./utils/cloudinary");
+const hashPassword = require("./utils/passwordHash");
 require("dotenv").config();
 const jwtSecret = process.env.secretKey;
 
@@ -36,7 +37,7 @@ router.post("/signup", async (req, res) => {
       return res.status(400).send("Email already exists");
     }
 
-    const hash = await bcrypt.hash(password, 5);
+    const hash = await hashPassword(password);
 
     const newUser = new userModel({
       name,
@@ -470,7 +471,7 @@ router.put("/resetpassword", async (req, res) => {
       return res.status(404).send("User not found");
     } else {
       if (user.otp === otp && user.otpExpiration > new Date()) {
-        const hash = await bcrypt.hash(password, 5);
+        const hash = await hashPassword(password);
         user.password = hash;
         user.otp = "";
         user.otpExpiration = null;
