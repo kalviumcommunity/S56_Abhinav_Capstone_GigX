@@ -397,17 +397,16 @@ router.get("/projects/:user", async (req, res) => {
 
 // transporter for sending email
 const transporter = nodemailer.createTransport({
-  service:"gmail",
+  service: "gmail",
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
   auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD
-  }
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
 });
 
-// forget password by otp in email
 router.post("/forgetpassword", async (req, res) => {
   try {
     const { email } = req.body;
@@ -424,7 +423,7 @@ router.post("/forgetpassword", async (req, res) => {
       user.otpExpiration = otpExpiration;
       await user.save();
 
-      let mailoptions = {
+      const mailoptions = {
         from: {
           name: "GigX",
           address: process.env.EMAIL,
@@ -444,22 +443,27 @@ Best regards,
 The GigX Team`,
       };
 
-      transporter.sendMail(mailoptions, function (err, data) {
+      transporter.sendMail(mailoptions, (err, data) => {
         if (err) {
-          console.log("Error Occurs", err);
-          res.status(500).send("Error sending email");
+          console.error("Error sending email: ", err);
+          if (err.responseCode === 535 || err.responseCode === 534) {
+            res.status(401).send("Invalid email credentials");
+          } else if (err.responseCode === 550) {
+            res.status(400).send("Email address not verified");
+          } else {
+            res.status(500).send("Error sending email");
+          }
         } else {
-          console.log("Email sent");
-          res.send("Email sent");
+          console.log("Email sent successfully: ", data);
+          res.status(200).send("OTP email sent successfully");
         }
       });
     }
   } catch (err) {
-    console.error(err);
+    console.error("Internal server error: ", err);
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 // reset password
 router.put("/resetpassword", async (req, res) => {
