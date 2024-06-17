@@ -7,6 +7,7 @@ const { projectModel } = require("./models/projectschema");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const {
   userValidationSchema,
   contactValidationSchema,
@@ -16,6 +17,8 @@ const upload = require("./utils/multer");
 const cloudinary = require("./utils/cloudinary");
 require("dotenv").config();
 const jwtSecret = process.env.secretKey;
+
+
 
 // post req for signup
 router.post("/signup", async (req, res) => {
@@ -147,7 +150,7 @@ router.put("/users/:email", async (req, res) => {
       location,
       country,
       experience,
-      profilePic, 
+      profilePic,
     } = req.body;
 
     const updatedFields = {
@@ -160,7 +163,7 @@ router.put("/users/:email", async (req, res) => {
       location,
       country,
       experience,
-      profilePic, 
+      profilePic,
     };
 
     const user = await userModel.findOneAndUpdate(
@@ -179,7 +182,6 @@ router.put("/users/:email", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 // deleting user by email
 router.delete("/users/:email", async (req, res) => {
@@ -306,20 +308,20 @@ router.get("/ratings/:email", async (req, res) => {
 });
 
 // post req to upload image
-router.post('/upload', upload.single('image'), function (req, res) {
-  cloudinary.uploader.upload(req.file.path, function (err, result){
-    if(err) {
-      console.log('Image cannot be uploaed:', err);
+router.post("/upload", upload.single("image"), function (req, res) {
+  cloudinary.uploader.upload(req.file.path, function (err, result) {
+    if (err) {
+      console.log("Image cannot be uploaed:", err);
       return res.status(500).json({
         success: false,
-        message: "Error uploading image"
+        message: "Error uploading image",
       });
     }
 
     res.status(200).json({
       success: true,
       message: "Uploaded!",
-      data: result
+      data: result,
     });
   });
 });
@@ -327,7 +329,7 @@ router.post('/upload', upload.single('image'), function (req, res) {
 const validateProjectData = (req, res, next) => {
   const { error, value } = projectValidationSchema.validate(req.body);
   if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+    return res.status(400).json({ error: error.details[0].message });
   }
   next();
 };
@@ -335,60 +337,117 @@ const validateProjectData = (req, res, next) => {
 // get request to fetch all projects
 router.get("/projects", async (req, res) => {
   try {
-      const projects = await projectModel.find();
-      res.status(200).send(projects);
+    const projects = await projectModel.find();
+    res.status(200).send(projects);
   } catch (err) {
-      console.error(err);
-      res.status(500).send("Internal Server Error");
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 });
 
 // post request to post a new project
 router.post("/projects", validateProjectData, async (req, res) => {
   try {
-      const {
-          user,
-          projectName,
-          endDate,
-          skillsRequired,
-          referenceDocument,
-          budget,
-          description,
-      } = req.body;
+    const {
+      user,
+      projectName,
+      endDate,
+      skillsRequired,
+      referenceDocument,
+      budget,
+      description,
+    } = req.body;
 
-      const newProject = new projectModel({
-          user,
-          projectName,
-          endDate,
-          skillsRequired,
-          referenceDocument,
-          budget,
-          description,
-      });
+    const newProject = new projectModel({
+      user,
+      projectName,
+      endDate,
+      skillsRequired,
+      referenceDocument,
+      budget,
+      description,
+    });
 
-      await newProject.save();
+    await newProject.save();
 
-      res.status(201).send("Project posted successfully");
+    res.status(201).send("Project posted successfully");
   } catch (err) {
-      console.error(err);
-      res.status(500).send("Internal Server Error");
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 });
 
 // get request to fetch projects by user ID
 router.get("/projects/:user", async (req, res) => {
   try {
-      const { user } = req.params;
-      const projects = await projectModel.find({ user });
+    const { user } = req.params;
+    const projects = await projectModel.find({ user });
 
-      if (projects.length === 0) {
-          return res.status(404).send("Projects not found");
-      }
+    if (projects.length === 0) {
+      return res.status(404).send("Projects not found");
+    }
 
-      res.status(200).send(projects);
+    res.status(200).send(projects);
   } catch (err) {
-      console.error(err);
-      res.status(500).send("Internal Server Error");
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// transporter for sending email
+const transporter = nodemailer.createTransport({
+  service:"gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD
+  }
+});
+// forget password by otp in email
+router.post("/forgetpassword", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await userModel.findOne({ email: email });
+    if (!user) {
+      return res.status(404).send("User not found");
+    } else {
+      const random = Math.floor(100000 + Math.random() * 900000);
+      const otp = String(random).padStart(6, "0");
+      let mailoptions = {
+        from: {
+          name: "GigX",
+          address: "contactgigx@gmail.com",
+        },
+        to: email,
+        subject: "OTP for password reset",
+        text: `We received a request to reset your password for your GigX account. To proceed with resetting your password, please use the following One-Time Password (OTP):
+
+Your OTP: ${otp}
+
+Please enter this OTP in the designated field on our password reset page. This code is valid for the next 10 minutes.
+
+If you did not request a password reset, please disregard this email. If you have any concerns, feel free to contact our support team.
+
+Best regards,
+
+The GigX Team`,
+      };
+
+      transporter.sendMail(mailoptions, function (err, data) {
+        if (err) {
+          console.log("Error Occurs", err);
+        } else {
+          console.log("Email sent");
+          res.send("Email sent");
+        }
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 });
 
