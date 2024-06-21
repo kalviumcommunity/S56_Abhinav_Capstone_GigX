@@ -30,6 +30,18 @@ const limiter = rateLimit({
 
 router.use(limiter);
 
+const signupLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: "Too many signup attempts from this IP, please try again after an hour",
+});
+
+const loginLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  message: "Too many login attempts from this IP, please try again after an hour",
+});
+
 const contactLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, 
   max: 5, 
@@ -37,13 +49,13 @@ const contactLimiter = rateLimit({
 });
 
 const projectLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
+  windowMs: 15 * 60 * 1000,
   max: 10,
-  message: "Too many project submissions from this IP, please try again after an hour",
+  message: "Too many project submissions from this IP, please try again after an 15 minutes",
 });
 
 // post req for signup
-router.post("/signup", limiter, async (req, res) => {
+router.post("/signup", signupLimiter, async (req, res) => {
   try {
     const { error } = userValidationSchema.validate(req.body);
     if (error) {
@@ -82,7 +94,7 @@ router.post("/signup", limiter, async (req, res) => {
 });
 
 // post req for login
-router.post("/login", limiter, async (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
