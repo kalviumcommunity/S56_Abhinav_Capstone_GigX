@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
 const { userModel } = require("./models/userschema");
 const { contactModel } = require("./models/contactschema");
 const { ratingModel } = require("./models/ratingschema");
@@ -20,17 +21,36 @@ require("dotenv").config();
 const jwtSecret = process.env.secretKey;
 
 
+// rate limiter
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: "Too many requests from this IP, please try again after 15 minutes",
+});
+
+router.use(limiter);
+
+const contactLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, 
+  max: 5, 
+  message: "Too many contact form submissions from this IP, please try again after an hour",
+});
+
+const projectLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  message: "Too many project submissions from this IP, please try again after an hour",
+});
 
 // post req for signup
-router.post("/signup", async (req, res) => {
+router.post("/signup", limiter, async (req, res) => {
   try {
     const { error } = userValidationSchema.validate(req.body);
     if (error) {
       return res.status(400).send(error.details);
     }
 
-    const { name, email, phone, role, company, password, freelancer, skills } =
-      req.body;
+    const { name, email, phone, role, company, password, freelancer, skills } = req.body;
 
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -52,9 +72,7 @@ router.post("/signup", async (req, res) => {
 
     await newUser.save();
 
-    const token = jwt.sign({ email: newUser.email }, jwtSecret, {
-      expiresIn: "5h",
-    });
+    const token = jwt.sign({ email: newUser.email }, jwtSecret, { expiresIn: "5h" });
 
     res.status(201).send({ token, email: newUser.email });
   } catch (err) {
@@ -64,7 +82,7 @@ router.post("/signup", async (req, res) => {
 });
 
 // post req for login
-router.post("/login", async (req, res) => {
+router.post("/login", limiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -76,9 +94,7 @@ router.post("/login", async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid) {
-      const token = jwt.sign({ email: user.email }, jwtSecret, {
-        expiresIn: "5h",
-      });
+      const token = jwt.sign({ email: user.email }, jwtSecret, { expiresIn: "5h" });
       console.log("Login successful");
 
       res.status(200).send({ token, email: user.email });
@@ -198,7 +214,7 @@ router.delete("/users/:email", async (req, res) => {
 });
 
 // post req for contact form
-router.post("/contact", async (req, res) => {
+router.post("/contact", contactLimiter, async (req, res) => {
   try {
     const { error } = contactValidationSchema.validate(req.body);
     if (error) {
@@ -217,7 +233,7 @@ router.post("/contact", async (req, res) => {
   }
 });
 
-router.get("/search", async (req, res) => {
+router.get("/search",limiter, async (req, res) => {
   try {
     const { keyword } = req.query;
 
@@ -347,7 +363,7 @@ router.get("/projects", async (req, res) => {
 });
 
 // post request to post a new project
-router.post("/projects", validateProjectData, async (req, res) => {
+router.post("/projects", projectLimiter,validateProjectData, async (req, res) => {
   try {
     const {
       user,
