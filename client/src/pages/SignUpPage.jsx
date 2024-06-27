@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
-import loginimg from "../assets/loginimg.png";
 import google from "../assets/google.png";
+import loginimg from "../assets/loginimg.png";
 import './Styles/SignUp.css';
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 const SignUpPage = () => {
+  const { user, loginWithRedirect, isAuthenticated, logout } = useAuth0();
   const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     name: '',
@@ -21,6 +24,38 @@ const SignUpPage = () => {
     freelancer: false 
   });
 
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const userData = {
+        name: user.name,
+        email: user.email,
+        phone: user.phone_number || "1234567890",
+        role: user.given_name,
+        company: user.address,
+        password: '123',
+        freelancer: false,
+        
+
+      };
+      axios.post(`${API}/signup`, userData).then(response => {
+        const { token, email } = response.data;
+        Cookies.set('token', token);
+        Cookies.set('email', email);
+        toast.success('Signup successful!', {
+          autoClose: 1000,
+          onClose: () => navigate('/')
+        });
+      }).catch(error => {
+        console.error('Error saving user data:', error);
+        if (error.response) {
+          console.error('Response data:', error.response.data);
+          console.error('Response status:', error.response.status);
+        }
+        toast.error('An error occurred. Please try again later.');
+      });
+    }
+  }, [isAuthenticated, user, navigate]);
+  console.log(user)
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     const newValue = type === 'checkbox' ? checked : value;
@@ -44,6 +79,8 @@ const SignUpPage = () => {
     } catch (error) {
       console.error('Error signing up:', error);
       if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
         switch (error.response.status) {
           case 400:
             toast.error('Email already exists');
@@ -83,15 +120,22 @@ const SignUpPage = () => {
                 <input type="password" name="password" placeholder="Password" className='signup-input' onChange={handleChange} required />
                 <div className="center">
                   <input type="checkbox" name="freelancer" className='pointer' onChange={handleChange} />
-                  <label >I am a Freelancer</label>
+                  <label>I am a Freelancer</label>
                 </div>
               </div>
               <button type="submit" className='signupbtn'>Sign Up</button>
               <p className='center'>Or</p>
-              <div className="google pointer">
-                <img src={google} alt="" />
-                <p>Continue With Google</p>
-              </div>
+              {isAuthenticated ? (
+                <div className="google pointer" onClick={() => logout({ returnTo: window.location.origin })}>
+                  <img src={google} alt="Google icon" />
+                  <p>Logout</p>
+                </div>
+              ) : (
+                <div className="google pointer" onClick={() => loginWithRedirect({ connection: 'google-oauth2' })}>
+                  <img src={google} alt="Google icon" />
+                  <p>Continue With Google</p>
+                </div>
+              )}
             </div>
             <div className="right-section">
               <img src={loginimg} alt="sign up image" />

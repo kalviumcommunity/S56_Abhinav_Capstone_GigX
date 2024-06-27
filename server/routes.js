@@ -180,6 +180,7 @@ router.put("/users/:email", async (req, res) => {
       country,
       experience,
       profilePic,
+      freelancer,
     } = req.body;
 
     const updatedFields = {
@@ -193,6 +194,7 @@ router.put("/users/:email", async (req, res) => {
       country,
       experience,
       profilePic,
+      freelancer,
     };
 
     const user = await userModel.findOneAndUpdate(

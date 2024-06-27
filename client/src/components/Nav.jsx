@@ -6,23 +6,29 @@ import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import Cookies from "js-cookie";
 
 const Nav = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const { logout, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userCookie = Cookies.get("token");
-    setIsLoggedIn(!!userCookie); 
-  }, []);
+    const checkLoginStatus = () => {
+      setIsLoggedIn(!!Cookies.get("token") && isAuthenticated);
+    };
+
+    checkLoginStatus();
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
-    Cookies.remove("token"); 
+    Cookies.remove("token");
     Cookies.remove("email");
-    setIsLoggedIn(false); 
+    logout({ returnTo: window.location.origin });
+    setIsLoggedIn(false);
     navigate("/");
   };
 
