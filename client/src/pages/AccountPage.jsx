@@ -128,6 +128,7 @@ const AccountPage = () => {
           <h1>Hi, {userData.name}</h1>
           <div className="account-details flex">
             <h2>Account Details</h2>
+            
             <Button
               variant="outlined"
               className="accountBtn"
@@ -145,6 +146,9 @@ const AccountPage = () => {
               </Button>
             )}
           </div>
+          {isAuthenticated && (
+              <p>Please Update your Phone,Role, Company or other details if you've Made your account with google</p>
+            )}
           <AccountInput
             fieldName="name"
             value={userData.name}

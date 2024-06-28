@@ -27,13 +27,13 @@ const SignUpPage = () => {
   useEffect(() => {
     if (isAuthenticated && user) {
       const userData = {
-        name: user.name,
-        email: user.email,
-        phone: user.phone_number || "1234567890",
-        role: user.given_name,
-        company: user.address,
-        password: '123',
-        freelancer: false,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone_number || '9999999999',
+        role: user.given_name || 'Enter Your Name Here',
+        company: user.address || 'Enter Your Company here',
+        password: '123456', 
+        freelancer: false 
         
 
       };
