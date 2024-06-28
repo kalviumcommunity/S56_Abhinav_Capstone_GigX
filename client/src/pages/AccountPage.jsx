@@ -1,6 +1,7 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import "./Styles/AccountPage.css";
 import Nav from "../components/Nav";
@@ -13,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AccountPage = () => {
   const userAPI = `${API}/users`;
+  const { user, isAuthenticated } = useAuth0();
 
   const [userData, setUserData] = useState({
     name: "",
@@ -25,11 +27,10 @@ const AccountPage = () => {
     country: "",
     experience: "",
     profilePic: "",
+    freelancer: false,
   });
   const [editMode, setEditMode] = useState(false);
-  const [freelancer, setFreelancer] = useState(false);
-  const [user,setUser] = useState(null);
-  const [projects, setProjects] = useState([]); 
+  const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,10 +39,11 @@ const AccountPage = () => {
         const userEmail = Cookies.get("email");
         const userDataResponse = await axios.get(`${userAPI}/${userEmail}`);
         const fetchedUserData = userDataResponse.data;
-        setUserData(fetchedUserData);
-        setFreelancer(fetchedUserData.freelancer);
-        setUser(fetchedUserData._id);
-  
+        setUserData({
+          ...fetchedUserData,
+          profilePic: isAuthenticated && user.picture ? user.picture : fetchedUserData.profilePic,
+        });
+
         const projectsResponse = await axios.get(`${API}/projects/${fetchedUserData._id}`);
         setProjects(projectsResponse.data);
       } catch (error) {
@@ -49,8 +51,7 @@ const AccountPage = () => {
       }
     };
     fetchData();
-  }, []);
-  
+  }, [isAuthenticated, user, userAPI]);
 
   const handleSave = async () => {
     try {
@@ -89,6 +90,13 @@ const AccountPage = () => {
     }));
   };
 
+  const handleFreelancerChange = (e) => {
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      freelancer: e.target.checked,
+    }));
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     try {
@@ -116,10 +124,11 @@ const AccountPage = () => {
       <Nav />
       <ToastContainer />
       <div className="page-container flex">
-        <div className="accountpageleft ">
+        <div className="accountpageleft">
           <h1>Hi, {userData.name}</h1>
           <div className="account-details flex">
             <h2>Account Details</h2>
+            
             <Button
               variant="outlined"
               className="accountBtn"
@@ -137,6 +146,9 @@ const AccountPage = () => {
               </Button>
             )}
           </div>
+          {isAuthenticated && (
+              <p>Please Update your Phone,Role, Company or other details if you've Made your account with google</p>
+            )}
           <AccountInput
             fieldName="name"
             value={userData.name}
@@ -172,7 +184,19 @@ const AccountPage = () => {
             placeholder="Company"
             onChange={(newValue) => handleChange("company", newValue)}
           />
-          {freelancer && (
+          {editMode && (
+            <div className="freelancer-checkbox">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={userData.freelancer}
+                  onChange={handleFreelancerChange}
+                />
+                Are you a freelancer?
+              </label>
+            </div>
+          )}
+          {userData.freelancer && (
             <>
               <AccountInput
                 fieldName="skills"
@@ -208,24 +232,21 @@ const AccountPage = () => {
           )}
 
           <h1>Active Projects</h1>
-          
+
           <div className="projects-grid">
-            
-  {projects.map((project, index) => (
-    <div key={index} className="project-details flex">
-      <h3> {project.projectName}</h3>
-      <p>{new Date(project.endDate).toLocaleDateString()}</p>
-      
-    </div>
-  ))}
-</div>
+            {projects.map((project, index) => (
+              <div key={index} className="project-details flex">
+                <h3>{project.projectName}</h3>
+                <p>{new Date(project.endDate).toLocaleDateString()}</p>
+              </div>
+            ))}
+          </div>
 
-
-          {!freelancer && (
+          {!userData.freelancer && (
             <>
               <br />
               <Link to={"/postproject"}>
-                <Button variant="outlined"> Post a new Project</Button>
+                <Button variant="outlined">Post a new Project</Button>
               </Link>
             </>
           )}

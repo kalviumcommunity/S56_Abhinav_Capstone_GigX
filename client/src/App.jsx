@@ -1,3 +1,4 @@
+import { Auth0Provider } from '@auth0/auth0-react';
 import Nav from "./components/Nav"
 import "./App.css"
 import LandingPage from "./pages/LandingPage"
@@ -13,12 +14,18 @@ import ContactUs from "./pages/ContactUs"
 import SearchResult from "./pages/SearchResult"
 import ProjectPostPage from "./pages/ProjectPostPage"
 import ResetPassword from "./pages/ResetPassword"
-
 function App() {
 
   return (
     <>
+<Auth0Provider
 
+    domain={REACT_APP_AUTH0_DOMAIN}
+    clientId={REACT_APP_AUTH0_CLIENT_ID}
+    authorizationParams={{
+      redirect_uri: window.location.origin
+    }}
+  >
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -37,7 +44,7 @@ function App() {
 
       </Routes>
       
-      
+      </Auth0Provider>
     </>
   )
 }
