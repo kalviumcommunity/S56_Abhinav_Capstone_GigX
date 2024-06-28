@@ -18,7 +18,7 @@ const Nav = () => {
 
   useEffect(() => {
     const checkLoginStatus = () => {
-      setIsLoggedIn(!!Cookies.get("token") && isAuthenticated);
+      setIsLoggedIn(!!Cookies.get("token") || isAuthenticated);
     };
 
     checkLoginStatus();
